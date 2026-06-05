@@ -135,91 +135,128 @@
                     </h2>
                 </div>
 
-                <form class="space-y-3">
+               ```blade
+<form method="POST" action="{{ route('register') }}" class="space-y-3">
+    @csrf
 
-                    <!-- Full Name -->
-                    <div>
-                        <label class="block text-sm text-white mb-1">
-                            نام کامل
-                        </label>
+    <!-- Full Name -->
+    <div>
+        <label class="block text-sm text-white mb-1">
+            نام کامل
+        </label>
 
-                        <div class="relative">
-                            <input type="text"
-                                placeholder="نام و نام خانوادگی"
-                                class="w-full bg-white/10 border border-white/20 rounded-xl py-2.5 pr-11 px-4 text-white placeholder-gray-300 focus:ring-2 focus:ring-[#34a898] outline-none">
+        <div class="relative">
+            <input
+                type="text"
+                name="name"
+                value="{{ old('name') }}"
+                required
+                autofocus
+                autocomplete="name"
+                placeholder="نام و نام خانوادگی"
+                class="w-full bg-white/10 border border-white/20 rounded-xl py-2.5 pr-11 px-4 text-white placeholder-gray-300 focus:ring-2 focus:ring-[#34a898] outline-none">
 
-                            <i
-                                class="fas fa-user absolute right-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
-                        </div>
-                    </div>
+            <i class="fas fa-user absolute right-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
+        </div>
 
-                    <!-- Email -->
-                    <div>
-                        <label class="block text-sm text-white mb-1">
-                            ایمیل
-                        </label>
+        @error('name')
+            <p class="text-red-300 text-sm mt-1">
+                {{ $message }}
+            </p>
+        @enderror
+    </div>
 
-                        <div class="relative">
-                            <input type="email"
-                                placeholder="example@gmail.com"
-                                class="w-full bg-white/10 border border-white/20 rounded-xl py-2.5 pr-11 px-4 text-white placeholder-gray-300 focus:ring-2 focus:ring-[#34a898] outline-none">
+    <!-- Email -->
+    <div>
+        <label class="block text-sm text-white mb-1">
+            ایمیل
+        </label>
 
-                            <i
-                                class="fas fa-envelope absolute right-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
-                        </div>
-                    </div>
+        <div class="relative">
+            <input
+                type="email"
+                name="email"
+                value="{{ old('email') }}"
+                required
+                autocomplete="username"
+                placeholder="example@gmail.com"
+                class="w-full bg-white/10 border border-white/20 rounded-xl py-2.5 pr-11 px-4 text-white placeholder-gray-300 focus:ring-2 focus:ring-[#34a898] outline-none">
 
-                    <!-- Password -->
-                    <div>
-                        <label class="block text-sm text-white mb-1">
-                            رمز عبور
-                        </label>
+            <i class="fas fa-envelope absolute right-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
+        </div>
 
-                        <div class="relative">
-                            <input type="password"
-                                placeholder="********"
-                                class="w-full bg-white/10 border border-white/20 rounded-xl py-2.5 pr-11 px-4 text-white placeholder-gray-300 focus:ring-2 focus:ring-[#34a898] outline-none">
+        @error('email')
+            <p class="text-red-300 text-sm mt-1">
+                {{ $message }}
+            </p>
+        @enderror
+    </div>
 
-                            <i
-                                class="fas fa-lock absolute right-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
-                        </div>
-                    </div>
+    <!-- Password -->
+    <div>
+        <label class="block text-sm text-white mb-1">
+            رمز عبور
+        </label>
 
-                    <!-- Confirm Password -->
-                    <div class="mb-3">
-                        <label class="block text-sm text-white mb-1">
-                            تکرار رمز عبور
-                        </label>
+        <div class="relative">
+            <input
+                type="password"
+                name="password"
+                required
+                autocomplete="new-password"
+                placeholder="********"
+                class="w-full bg-white/10 border border-white/20 rounded-xl py-2.5 pr-11 px-4 text-white placeholder-gray-300 focus:ring-2 focus:ring-[#34a898] outline-none">
 
-                        <div class="relative mb-3">
-                            <input type="password"
-                                placeholder="********"
-                                class="w-full bg-white/10 border border-white/20 rounded-xl py-2.5 pr-11 px-4 text-white placeholder-gray-300 focus:ring-2 focus:ring-[#34a898] outline-none">
+            <i class="fas fa-lock absolute right-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
+        </div>
 
-                            <i
-                                class="fas fa-shield-alt absolute right-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
-                        </div>
-                    </div>
+        @error('password')
+            <p class="text-red-300 text-sm mt-1">
+                {{ $message }}
+            </p>
+        @enderror
+    </div>
 
-                    <!-- Button -->
-                    <button type="submit"
-                        class="w-full bg-[#34a898] mt-5 hover:bg-[#2c8c7d] text-white py-3 rounded-xl font-semibold transition-all duration-300">
-                        ایجاد حساب کاربری
-                    </button>
+    <!-- Confirm Password -->
+    <div class="mb-3">
+        <label class="block text-sm text-white mb-1">
+            تکرار رمز عبور
+        </label>
 
-                    <!-- Login Link -->
-                    <div class="text-center ">
-                        <span class="text-gray-200">
-                            قبلاً حساب دارید؟
-                        </span>
+        <div class="relative">
+            <input
+                type="password"
+                name="password_confirmation"
+                required
+                autocomplete="new-password"
+                placeholder="********"
+                class="w-full bg-white/10 border border-white/20 rounded-xl py-2.5 pr-11 px-4 text-white placeholder-gray-300 focus:ring-2 focus:ring-[#34a898] outline-none">
 
-                        <a href="#"
-                            class="text-[#7fffd4] hover:text-white font-medium">
-                            ورود به سیستم
-                        </a>
-                    </div>
+            <i class="fas fa-shield-alt absolute right-4 top-1/2 -translate-y-1/2 text-gray-300"></i>
+        </div>
+    </div>
 
-                </form>
+    <!-- Button -->
+    <button
+        type="submit"
+        class="w-full bg-[#34a898] mt-5 hover:bg-[#2c8c7d] text-white py-3 rounded-xl font-semibold transition-all duration-300">
+        ایجاد حساب کاربری
+    </button>
+
+    <!-- Login Link -->
+    <div class="text-center">
+        <span class="text-gray-200">
+            قبلاً حساب دارید؟
+        </span>
+
+        <a href="{{ route('login') }}"
+            class="text-[#7fffd4] hover:text-white font-medium">
+            ورود به سیستم
+        </a>
+    </div>
+</form>
+```
+
 
             </div>
 
