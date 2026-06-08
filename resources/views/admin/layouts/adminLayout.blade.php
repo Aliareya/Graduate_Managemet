@@ -44,6 +44,7 @@
         </main>
 
     </div>
+    @stack('page_script')
 
 </body>
 </html>
