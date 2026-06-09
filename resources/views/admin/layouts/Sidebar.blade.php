@@ -21,7 +21,7 @@
          <!-- Main -->
          <div>
              <p class="text-xs text-[#3aa093] font-semibold mb-3 px-3">اصلی</p>
-             <a href="#"
+             <a href="{{ route('home') }}"
                  class="flex items-center gap-3 px-3 py-2.5 hover:bg-[#34a89875] bg-[#34a898] rounded-lg text-white text-sm font-medium">
                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -35,7 +35,7 @@
          <div>
              <p class="text-xs text-[#3aa093]  font-semibold mb-3 px-3">مدیریت فارغان</p>
              <div class="space-y-1">
-                 <a href="#"
+                 <a href="{{ route('graduates.index') }}"
                      class="hover:bg-[#34a89875] flex items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white text-sm transition-colors">
                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -43,7 +43,7 @@
                      </svg>
                      لیست فارغان
                  </a>
-                 <a href="#"
+                 <a href="{{ route('graduates.create') }}"
                      class="flex hover:bg-[#34a89875] items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white text-sm transition-colors">
                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -51,22 +51,22 @@
                      </svg>
                      ثبت فارغ جدید
                  </a>
-                 <a href="#"
+                 {{-- <a href="#"
                      class="flex items-center hover:bg-[#34a89875] gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white text-sm transition-colors">
                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                              d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0" />
                      </svg>
                      پروفایل فارغان
-                 </a>
+                 </a> --}}
              </div>
          </div>
 
          <!-- University Structure -->
          <div>
-             <p class="text-xs text-[#3aa093]  font-semibold mb-3 px-3">ساختار دانشگاه</p>
+             <p class="text-xs text-[#3aa093]  font-semibold mb-3 px-3">ساختار پوهنخی ها</p>
              <div class="space-y-1">
-                 <a href="#"
+                 <a href="{{ route('facultes.index') }}"
                      class="flex hover:bg-[#34a89875] items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white text-sm transition-colors">
                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -74,75 +74,13 @@
                      </svg>
                      مدیریت دانشکده‌ها
                  </a>
-                 <a href="#"
+                 <a href="{{ route('departments.index') }}"
                      class="flex hover:bg-[#34a89875] items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white text-sm transition-colors">
                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                              d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
                      </svg>
                      مدیریت دپارتمنت‌ها
-                 </a>
-             </div>
-         </div>
-
-         <!-- Services -->
-         <div>
-             <p class="text-xs text-[#3aa093]  font-semibold mb-3 px-3">خدمات</p>
-             <div class="space-y-1">
-                 <a href="#"
-                     class="flex hover:bg-[#34a89875]items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white text-sm transition-colors">
-                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                             d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                     </svg>
-                     فرصت‌های شغلی
-                 </a>
-                 <a href="#"
-                     class="flex hover:bg-[#34a89875] items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white text-sm transition-colors">
-                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                             d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                     </svg>
-                     رویدادها
-                 </a>
-                 <a href="#"
-                     class="flex hover:bg-[#34a89875] items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white text-sm transition-colors">
-                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                             d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z" />
-                     </svg>
-                     اطلاعیه‌ها
-                 </a>
-                 <a href="#"
-                     class="flex hover:bg-[#34a89875] items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white text-sm transition-colors">
-                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                             d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                     </svg>
-                     اسناد و مدارک
-                 </a>
-             </div>
-         </div>
-
-         <!-- Reports -->
-         <div>
-             <p class="text-xs text-[#3aa093]  font-semibold mb-3 px-3">گزارشات</p>
-             <div class="space-y-1">
-                 <a href="#"
-                     class="flex hover:bg-[#34a89875] items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white text-sm transition-colors">
-                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                             d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                     </svg>
-                     گزارشات
-                 </a>
-                 <a href="#"
-                     class="flex hover:bg-[#34a89875] items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white text-sm transition-colors">
-                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                             d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
-                     </svg>
-                     تحلیل و آمار
                  </a>
              </div>
          </div>
@@ -181,17 +119,5 @@
          </div>
      </nav>
 
-     <!-- User Profile at Bottom -->
-     <div class="px-4 py-4 border-t border-white/10">
-         <div class="flex items-center gap-3 px-3 py-2">
-             <div
-                 class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                 م.ا
-             </div>
-             <div>
-                 <p class="text-sm font-semibold">محمد امینی</p>
-                 <p class="text-xs text-gray-400">مدیر سیستم</p>
-             </div>
-         </div>
-     </div>
+ 
  </aside>

@@ -14,5 +14,9 @@ Route::resource('/facultes' , FacultyController::class);
 
 Route::resource('/graduates' , GraduateController::class);
 
+Route::get('/users' , function(){
+    return view('admin.pages.users.index');
+});
+
 
 require __DIR__.'/auth.php';
