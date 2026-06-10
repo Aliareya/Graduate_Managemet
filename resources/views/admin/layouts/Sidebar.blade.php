@@ -89,7 +89,7 @@
          <div>
              <p class="text-xs  text-[#3aa093] font-semibold mb-3 px-3">سیستم</p>
              <div class="space-y-1">
-                 <a href="#"
+                 <a href="{{ route('users') }}"
                      class="flex hover:bg-[#34a89875] items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white text-sm transition-colors">
                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -97,7 +97,7 @@
                      </svg>
                      مدیریت کاربران
                  </a>
-                 <a href="#"
+                 <a href="{{ route('roles.index') }}"
                      class="flex hover:bg-[#34a89875] items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white text-sm transition-colors">
                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -105,7 +105,7 @@
                      </svg>
                      نقش‌ها و دسترسی‌ها
                  </a>
-                 <a href="#"
+                 <a href="{{ route('setting') }}"
                      class="flex hover:bg-[#34a89875] items-center gap-3 px-3 py-2.5 rounded-lg text-gray-300 hover:bg-sidebarHover hover:text-white text-sm transition-colors">
                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

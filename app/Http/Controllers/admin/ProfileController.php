@@ -1,0 +1,16 @@
+<?php
+
+namespace App\Http\Controllers\admin;
+
+use App\Http\Controllers\Controller;
+
+class ProfileController extends Controller
+{
+    public function index(){
+        return view('admin.pages.profile.index');
+    }
+
+    public function update(){
+        return view('admin.pages.profile.edit');
+    }
+}
