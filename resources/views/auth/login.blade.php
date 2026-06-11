@@ -115,7 +115,7 @@
                     حساب کاربری ندارید؟ 
                 </span>
 
-                <a href="{{ route('login') }}" class="text-[#7fffd4] hover:text-white font-medium">
+                <a href="{{ route('register') }}" class="text-[#7fffd4] hover:text-white font-medium">
                     ثبت نام
                 </a>
             </div>

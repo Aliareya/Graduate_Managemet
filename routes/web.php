@@ -10,26 +10,27 @@ use App\Http\Controllers\admin\SettingController;
 use App\Http\Controllers\admin\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [DashboardController::class, 'index'])->name('home');
+Route::middleware('auth')->group(function(){
+    Route::get('/', [DashboardController::class, 'index'])->name('home');
 
-Route::resource('/departments' , DepartmentController::class);
+    Route::resource('/departments' , DepartmentController::class);
+    
+    Route::resource('/facultes' , FacultyController::class);
+    
+    Route::resource('/graduates' , GraduateController::class);
+    
+    Route::get('/users' , [UserController::class , 'index'])->name('users');
 
-Route::resource('/facultes' , FacultyController::class);
-
-Route::resource('/graduates' , GraduateController::class);
-
-Route::get('/users' , [UserController::class , 'index'])->name('users');
-Route::get('/users/edit' , [UserController::class , 'update'])->name('users.edit');
-
-Route::resource('/roles' , RoleController::class);
-
-Route::get('/settings' , [SettingController::class , 'index'])->name('setting');
-
-Route::get('/my-profile' , [ProfileController::class, 'index']);
-
-Route::get('/my-profile/edit' , [ProfileController::class, 'update']);
-
-
+    Route::get('/users/edit' , [UserController::class , 'update'])->name('users.edit');
+    
+    Route::resource('/roles' , RoleController::class);
+    
+    Route::get('/settings' , [SettingController::class , 'index'])->name('setting');
+    
+    Route::get('/my-profile' , [ProfileController::class, 'index']);
+    
+    Route::get('/my-profile/edit' , [ProfileController::class, 'update']);
+});
 
 require __DIR__.'/auth.php';
 
