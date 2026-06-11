@@ -19,6 +19,7 @@ Route::resource('/facultes' , FacultyController::class);
 Route::resource('/graduates' , GraduateController::class);
 
 Route::get('/users' , [UserController::class , 'index'])->name('users');
+Route::get('/users/edit' , [UserController::class , 'update'])->name('users.edit');
 
 Route::resource('/roles' , RoleController::class);
 
