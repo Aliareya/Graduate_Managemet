@@ -13,6 +13,8 @@ use Illuminate\Validation\Rules;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
+use function Symfony\Component\Clock\now;
+
 class RegisteredUserController extends Controller
 {
     /**
@@ -40,6 +42,8 @@ class RegisteredUserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'status' => 'active',
+            'finaly_login' => now()
         ]);
 
         event(new Registered($user));
