@@ -8,6 +8,7 @@ use App\Http\Controllers\admin\ProfileController;
 use App\Http\Controllers\admin\RoleController;
 use App\Http\Controllers\admin\SettingController;
 use App\Http\Controllers\admin\UserController;
+use App\Http\Controllers\admin\UserRoleController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function(){
@@ -20,6 +21,9 @@ Route::middleware('auth')->group(function(){
     Route::resource('/graduates' , GraduateController::class);
     
     Route::get('/users' , [UserController::class , 'index'])->name('users');
+    Route::get('/assignRole' , [UserRoleController::class , 'index'])->name('assignRole');
+    Route::post('/assignRole' , [UserRoleController::class , 'assignRole'])->name('assignRole');
+    Route::get('/removerole' , [UserRoleController::class , 'remove'])->name('removerole');
 
     Route::get('/users/edit' , [UserController::class , 'update'])->name('users.edit');
     

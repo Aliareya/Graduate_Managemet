@@ -9,13 +9,13 @@
                 <h1 class="text-2xl font-bold text-gray-800 mb-1">نقش‌ها و دسترسی‌ها</h1>
                 <p class="text-sm text-gray-500">تعریف نقش‌ها و سطوح دسترسی کاربران سیستم</p>
             </div>
-            <button
+            <a href="{{ route('roles.create') }}"
                 class="bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2 px-5 py-2.5 rounded-lg text-sm font-medium transition-colors shadow-sm">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                 </svg>
                 نقش جدید
-            </button>
+            </a>
         </div>
 
         <!-- Role Cards Grid -->
