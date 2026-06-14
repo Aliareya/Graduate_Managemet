@@ -44,6 +44,9 @@ class FacultyController extends Controller
      */
     public function edit(string $id)
     {
+        if (!auth()->user()->hasPermission('users.create')) {
+            abort(403);
+        }
         return view('admin.pages.facultes.edit');
     }
 

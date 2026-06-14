@@ -58,10 +58,10 @@
 
                      <div class="hidden md:block text-left">
                          <p class="text-sm font-semibold text-gray-900">
-                             Alireza Ebrahimi
+                             {{ auth()->user()->name }}
                          </p>
                          <p class="text-xs text-gray-500">
-                             Administrator
+                            {{ auth()->user()->email }}
                          </p>
                      </div>
 
@@ -88,11 +88,11 @@
 
                              <div>
                                  <h4 class="text-white font-bold">
-                                     Alireza Ebrahimi
+                                     {{ auth()->user()->name }}
                                  </h4>
 
                                  <p class="text-cyan-100 text-sm">
-                                     System Administrator
+                                    {{ auth()->user()->email }}
                                  </p>
                              </div>
 

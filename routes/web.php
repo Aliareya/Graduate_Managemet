@@ -10,7 +10,6 @@ use App\Http\Controllers\admin\RoleController;
 use App\Http\Controllers\admin\SettingController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\UserRoleController;
-use App\Models\Permission;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function(){
@@ -37,8 +36,7 @@ Route::middleware('auth')->group(function(){
     
     Route::get('/my-profile/edit' , [ProfileController::class, 'update']);
 
-    Route::get('/permissions/create' , [PermissionController::class, 'create'])->name('permission.create');
-    Route::post ('/permissions/store' , [PermissionController::class, 'store'])->name('permission.store');
+    Route::resource('/permissions' , PermissionController::class)->only(['index', 'create', 'store']);
 });
 
 require __DIR__.'/auth.php';

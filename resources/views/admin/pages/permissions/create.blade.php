@@ -14,7 +14,7 @@
 
         @include('admin.layouts.popup')
 
-        <form class="max-w-3xl" action="{{ route('permission.store') }}" method="POST">
+        <form class="max-w-3xl" action="{{ route('permissions.store') }}" method="POST">
             @csrf
             <!-- Basic Info Section -->
             <div class="bg-white rounded-2xl border border-gray-200 p-6 mb-6">

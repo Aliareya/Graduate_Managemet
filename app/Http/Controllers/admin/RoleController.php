@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class RoleController extends Controller
 {
@@ -15,7 +16,7 @@ class RoleController extends Controller
     public function index()
     {
         $roles = Role::with('permissions')->get();
-        return view('admin.pages.roles.index' , compact('roles'));
+        return view('admin.pages.roles.index', compact('roles'));
     }
 
     /**
@@ -39,7 +40,6 @@ class RoleController extends Controller
                     ];
                 })->values()->toArray(),
             ],
-
             [
                 'title' => 'ساختار دانشگاه',
                 'description' => 'مدیریت دانشکده‌ها و دپارتمنت‌ها',
@@ -53,8 +53,6 @@ class RoleController extends Controller
                     ];
                 })->values()->toArray(),
             ],
-
-
             [
                 'title' => 'مدیریت کاربران',
                 'description' => 'دسترسی به مدیریت کاربران سیستم',
@@ -78,26 +76,22 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        // 1. Validate input
         $request->validate([
             'name' => 'required|string|max:255|unique:roles,name',
             'description' => 'nullable|string',
-            'permissions' => 'array', // checkbox list
+            'permissions' => 'array',
             'permissions.*' => 'exists:permissions,id',
         ]);
 
-        // 2. Create role
         $role = Role::create([
             'name' => $request->name,
             'description' => $request->description,
         ]);
 
-        // 3. Attach permissions (if any selected)
         if ($request->has('permissions')) {
             $role->permissions()->attach($request->permissions);
         }
 
-        // 4. Redirect back with success message
         return redirect()
             ->route('roles.index')
             ->with('success', 'Role created successfully with permissions.');
@@ -114,17 +108,79 @@ class RoleController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        return view('admin.pages.roles.edit');
+        $role = Role::with('permissions')->findOrFail($id);
+
+        $permissions = Permission::all()->groupBy('category');
+
+        return view('admin.pages.roles.edit', compact(
+            'role',
+            'permissions'
+        ));
     }
 
     /**
      * Update the specified resource in storage.
      */
+
     public function update(Request $request, string $id)
     {
-        //
+        // Find Role
+        $role = Role::findOrFail($id);
+
+        // Validate Request
+        $validated = $request->validate([
+            'name' => [
+                'required',
+                'string',
+                'max:255',
+                Rule::unique('roles', 'name')->ignore($role->id),
+            ],
+
+            'description' => [
+                'nullable',
+                'string',
+                'max:500',
+            ],
+
+            'permissions' => [
+                'nullable',
+                'array',
+            ],
+
+            'permissions.*' => [
+                'integer',
+                'exists:permissions,id',
+            ],
+        ], [
+            'name.required' => 'نام نقش الزامی است.',
+            'name.unique' => 'این نام نقش قبلاً استفاده شده است.',
+            'name.max' => 'نام نقش نباید بیشتر از 255 کاراکتر باشد.',
+
+            'description.max' => 'توضیحات نباید بیشتر از 500 کاراکتر باشد.',
+
+            'permissions.array' => 'فرمت دسترسی‌ها نامعتبر است.',
+            'permissions.*.exists' => 'یک یا چند دسترسی انتخاب شده معتبر نیستند.',
+        ]);
+
+        // Update Role
+        $role->update([
+            'name'        => $validated['name'],
+            'description' => $validated['description'] ?? null,
+        ]);
+
+        // Sync Permissions
+        $role->permissions()->sync(
+            $validated['permissions'] ?? []
+        );
+
+        return redirect()
+            ->route('roles.edit', $role->id)
+            ->with(
+                'success',
+                'نقش با موفقیت بروزرسانی شد.'
+            );
     }
 
     /**
