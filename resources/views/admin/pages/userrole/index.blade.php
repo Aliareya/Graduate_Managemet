@@ -23,7 +23,7 @@
                 </span>
             </div>
         @endif
-        <form class="max-w-4xl" method="POST" action="{{ route('assignRole') }}">
+        <form class="max-w-4xl" method="POST" action="{{ route('assign-role.store') }}">
             <!-- User & Role Selection -->
             <div class="bg-white rounded-2xl border border-gray-200 p-6 mb-6">
                 <h2 class="text-lg font-bold text-gray-800 mb-5 border-b border-gray-100 pb-3">اطلاعات کاربر</h2>

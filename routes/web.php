@@ -12,32 +12,34 @@ use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\UserRoleController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware('auth')->group(function(){
+Route::middleware('auth')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('home');
 
-    Route::resource('/departments' , DepartmentController::class);
-    
-    Route::resource('/facultes' , FacultyController::class);
-    
-    Route::resource('/graduates' , GraduateController::class);
-    
-    Route::get('/users' , [UserController::class , 'index'])->name('users');
-    Route::get('/assignRole' , [UserRoleController::class , 'index'])->name('assignRole');
-    Route::post('/assignRole' , [UserRoleController::class , 'assignRole'])->name('assignRole');
-    Route::get('/removerole' , [UserRoleController::class , 'remove'])->name('removerole');
+    Route::resource('/departments', DepartmentController::class);
 
-    Route::get('/users/edit' , [UserController::class , 'update'])->name('users.edit');
-    
-    Route::resource('/roles' , RoleController::class);
-    
-    Route::get('/settings' , [SettingController::class , 'index'])->name('setting');
-    
-    Route::get('/my-profile' , [ProfileController::class, 'index']);
-    
-    Route::get('/my-profile/edit' , [ProfileController::class, 'update']);
+    Route::resource('/facultes', FacultyController::class);
 
-    Route::resource('/permissions' , PermissionController::class)->only(['index', 'create', 'store']);
+    Route::resource('/graduates', GraduateController::class);
+
+    Route::resource('/users', UserController::class)->only('index' , 'edit' , 'update');
+
+    // Route::get('/users/edit', [UserController::class, 'update'])->name('users.edit');
+
+    Route::resource('/roles', RoleController::class);
+
+    Route::controller(UserRoleController::class)->group(function () {
+        Route::get('/assign-role', 'index')->name('assign-role.index');
+        Route::post('/assign-role', 'assignRole')->name('assign-role.store');
+        // Route::delete('/remove-role/{user}/{role}', 'remove')->name('assign-role.destroy');
+    });
+
+    Route::get('/settings', [SettingController::class, 'index'])->name('setting');
+
+    Route::get('/my-profile', [ProfileController::class, 'index']);
+
+    Route::get('/my-profile/edit', [ProfileController::class, 'update']);
+
+    Route::resource('/permissions', PermissionController::class)->only(['index', 'create', 'store']);
 });
 
-require __DIR__.'/auth.php';
-
+require __DIR__ . '/auth.php';

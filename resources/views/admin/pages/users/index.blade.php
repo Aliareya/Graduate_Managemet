@@ -141,7 +141,7 @@
                                 </td>
                                 <td class="px-6 py-4 text-sm text-gray-600">{{ $user->created_at->format('Y/m/d') }}</td>
                                 <td class="px-6 py-4 text-sm text-gray-600">
-                                    {{ $user->created_at->diffForHumans() }}
+                                    {{ $user['finaly_login']->diffForHumans() }}
                                 </td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center gap-2">
