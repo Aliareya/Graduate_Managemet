@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Department;
 use App\Models\Faculty;
+use App\Models\Graduate;
 use Illuminate\Http\Request;
 
 class DepartmentController extends Controller
@@ -79,7 +80,10 @@ class DepartmentController extends Controller
      */
     public function show(string $id)
     {
-        return view('admin.pages.departments.show');
+        $department = Department::with('faculty')->find($id);
+        $graduate = Graduate::all()->where('department_id' , $id);
+        // dd($department , $graduate);
+        return view('admin.pages.departments.show' , compact('department', 'graduate'));
     }
 
     /**
@@ -87,7 +91,10 @@ class DepartmentController extends Controller
      */
     public function edit(string $id)
     {
-        return view('admin.pages.departments.edit');
+        $department = Department::find($id);
+        $faculties = Faculty::where('is_active', true)->orderBy('name')->get();
+        // dd($department);
+        return view('admin.pages.departments.edit' , compact('department' , 'faculties'));
     }
 
     /**
