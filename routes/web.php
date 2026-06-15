@@ -21,7 +21,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('/graduates', GraduateController::class);
 
-    Route::resource('/users', UserController::class)->only('index' , 'edit' , 'update');
+    Route::resource('/users', UserController::class)->only('index', 'edit', 'update');
 
     // Route::get('/users/edit', [UserController::class, 'update'])->name('users.edit');
 
@@ -41,5 +41,16 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('/permissions', PermissionController::class)->only(['index', 'create', 'store']);
 });
+
+Route::get('/lang/{locale}', function ($locale) {
+
+    if (! in_array($locale, ['en', 'fa'])) {
+        abort(404);
+    }
+
+    session(['locale' => $locale]);
+
+    return redirect()->back();
+})->name('lang.switch');
 
 require __DIR__ . '/auth.php';

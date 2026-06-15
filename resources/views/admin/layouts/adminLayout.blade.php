@@ -2,6 +2,8 @@
 <html lang="fa" dir="rtl">
 
 <head>
+    <html lang="{{ app()->getLocale() }}"
+      dir="{{ app()->getLocale() == 'fa' ? 'rtl' : 'ltr' }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>سامانه فارغان - داشبورد</title>
