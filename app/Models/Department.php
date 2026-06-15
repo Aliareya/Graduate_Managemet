@@ -27,4 +27,9 @@ class Department extends Model
         'status',
         'show_on_homepage',
     ];
+
+    public function faculty()
+    {
+        return $this->belongsTo(Faculty::class);
+    }
 }

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Department;
+use App\Models\Faculty;
 use Illuminate\Http\Request;
 
 class DepartmentController extends Controller
@@ -12,7 +14,9 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        return view('admin.pages.departments.Index');
+        $departments = Department::with('faculty')->get();
+        // dd($departments);
+        return view('admin.pages.departments.Index' , compact('departments'));
     }
 
     /**
@@ -20,7 +24,8 @@ class DepartmentController extends Controller
      */
     public function create()
     {
-        return view('admin.pages.departments.create');
+        $faculties = Faculty::where('is_active', true)->orderBy('name')->get();
+        return view('admin.pages.departments.create', compact('faculties'));
     }
 
     /**
@@ -28,11 +33,50 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
-        }
-        
-        /**
-         * Display the specified resource.
-        */
+        $validated = $request->validate([
+            'name'             => 'required|string|max:255',
+            'code'             => 'required|string|max:50|unique:departments,code',
+            'faculty_id'       => 'required|exists:faculties,id',
+            'head_name'        => 'required|string|max:255',
+            'head_degree'      => 'nullable|in:phd,master,bachelor',
+            'head_speciality'  => 'nullable|string|max:255',
+            'head_phone'       => 'nullable|string|max:20',
+            'head_email'       => 'nullable|email|max:255',
+            'head_start_year'  => 'nullable|string|max:10',
+            'location'         => 'nullable|string|max:255',
+            'phone'            => 'nullable|string|max:20',
+            'email'            => 'nullable|email|max:255',
+            'description'      => 'nullable|string|max:500',
+            'status'           => 'required|in:active,inactive',
+            'show_on_homepage' => 'nullable|boolean',
+        ]);
+
+        Department::create([
+            'name'             => $validated['name'],
+            'code'             => $validated['code'],
+            'faculty_id'       => $validated['faculty_id'],
+            'head_name'        => $validated['head_name'],
+            'head_degree'      => $validated['head_degree'] ?? null,
+            'head_speciality'  => $validated['head_speciality'] ?? null,
+            'head_phone'       => $validated['head_phone'] ?? null,
+            'head_email'       => $validated['head_email'] ?? null,
+            'head_start_year'  => $validated['head_start_year'] ?? null,
+            'location'         => $validated['location'] ?? null,
+            'phone'            => $validated['phone'] ?? null,
+            'email'            => $validated['email'] ?? null,
+            'description'      => $validated['description'] ?? null,
+            'is_active'        => $validated['status'] === 'active',
+            'show_on_homepage' => $request->boolean('show_on_homepage'),
+        ]);
+
+        return redirect()
+            ->route('departments.index')
+            ->with('success', 'دپارتمان با موفقیت ثبت شد.');
+    }
+
+    /**
+     * Display the specified resource.
+     */
     public function show(string $id)
     {
         return view('admin.pages.departments.show');

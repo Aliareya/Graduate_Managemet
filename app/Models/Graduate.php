@@ -29,8 +29,19 @@ class Graduate extends Model
 
         // Employment
         'is_employed',
+        'job_status',
         'company_name',
         'job_title',
         'work_location',
     ];
+
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
+    }
+
+    public function faculty()
+    {
+        return $this->belongsTo(Faculty::class);
+    }
 }

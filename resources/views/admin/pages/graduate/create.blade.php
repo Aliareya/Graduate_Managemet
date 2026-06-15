@@ -7,7 +7,16 @@
             <p class="text-gray-500">لطفاً تمام اطلاعات مورد نیاز را در فرم زیر تکمیل نمایید.</p>
         </div>
 
-        <!-- Form Container -->
+        @if ($errors->any())
+            <div class="mb-6 bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-xl">
+                <ul class="list-disc list-inside space-y-1 text-sm">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <form action="{{ route('graduates.store') }}" method="POST" id="graduateForm">
             @csrf
             <div class="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm space-y-10">
@@ -26,21 +35,23 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 نام <span class="text-red-500">*</span>
                             </label>
-                            <input type="text" name="first_name" required placeholder="نام"
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all">
+                            <input type="text" name="first_name" required value="{{ old('first_name') }}"
+                                placeholder="نام"
+                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all @error('first_name') border-red-400 @enderror">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 تخلص <span class="text-red-500">*</span>
                             </label>
-                            <input type="text" name="last_name" required placeholder="تخلص"
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all">
+                            <input type="text" name="last_name" required value="{{ old('last_name') }}"
+                                placeholder="تخلص"
+                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all @error('last_name') border-red-400 @enderror">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 نام پدر
                             </label>
-                            <input type="text" name="father_name" placeholder="نام پدر"
+                            <input type="text" name="father_name" value="{{ old('father_name') }}" placeholder="نام پدر"
                                 class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all">
                         </div>
                         <div>
@@ -50,8 +61,8 @@
                             <select name="gender"
                                 class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-white">
                                 <option value="">انتخاب کنید</option>
-                                <option value="male">مرد</option>
-                                <option value="female">زن</option>
+                                <option value="male" {{ old('gender') === 'male' ? 'selected' : '' }}>مرد</option>
+                                <option value="female" {{ old('gender') === 'female' ? 'selected' : '' }}>زن</option>
                             </select>
                         </div>
                         <div>
@@ -59,10 +70,10 @@
                                 تاریخ تولد
                             </label>
                             <div class="relative">
-                                <input type="date" name="birth_date"
+                                <input type="date" name="birth_date" value="{{ old('birth_date') }}"
                                     class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all">
-                                <svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none"
-                                    stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-5 h-5 text-gray-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none"
+                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                 </svg>
@@ -82,25 +93,19 @@
                     </h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                شماره تماس
-                            </label>
-                            <input type="tel" name="phone" placeholder="07XXXXXXXXX"
+                            <label class="block text-sm font-medium text-gray-700 mb-2">شماره تماس</label>
+                            <input type="tel" name="phone" value="{{ old('phone') }}" placeholder="07XXXXXXXXX"
                                 class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                ایمیل
-                            </label>
-                            <input type="email" name="email" placeholder="example@email.com"
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">ایمیل</label>
+                            <input type="email" name="email" value="{{ old('email') }}" placeholder="example@email.com"
+                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all @error('email') border-red-400 @enderror">
                         </div>
                         <div class="md:col-span-2">
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                آدرس
-                            </label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">آدرس</label>
                             <textarea name="address" rows="4" placeholder="آدرس کامل محل سکونت"
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none"></textarea>
+                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all resize-none">{{ old('address') }}</textarea>
                         </div>
                     </div>
                 </div>
@@ -121,55 +126,63 @@
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 شماره محصل <span class="text-red-500">*</span>
                             </label>
-                            <input type="text" name="student_id" required placeholder="مثال: 14001234"
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all">
+                            <input type="text" name="student_id" required value="{{ old('student_id') }}"
+                                placeholder="مثال: 14001234"
+                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all @error('student_id') border-red-400 @enderror">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 دانشکده <span class="text-red-500">*</span>
                             </label>
-                            <select name="faculty_id" required
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-white">
+                            <select name="faculty_id" id="faculty_id" required
+                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-white @error('faculty_id') border-red-400 @enderror">
                                 <option value="">انتخاب دانشکده</option>
-                                <option value="1">کامپیوتر ساینس</option>
-                                <option value="2">اقتصاد</option>
-                                <option value="3">انجنیری</option>
-                                <option value="4">حقوق و علوم سیاسی</option>
+                                @foreach ($faculties as $faculty)
+                                    <option value="{{ $faculty->id }}"
+                                        {{ old('faculty_id') == $faculty->id ? 'selected' : '' }}>
+                                        {{ $faculty->name }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 دپارتمنت
                             </label>
-                            <select name="department_id"
+                            <select name="department_id" id="department_id"
                                 class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-white">
                                 <option value="">ابتدا دانشکده انتخاب کنید</option>
+                                @foreach ($departments as $department)
+                                    <option value="{{ $department->id }}" data-faculty="{{ $department->faculty_id }}"
+                                        {{ old('department_id') == $department->id ? 'selected' : '' }}>
+                                        {{ $department->name }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                سال ورودی
-                            </label>
-                            <input type="text" name="entry_year" placeholder="مثال: ۱۳۹۸"
+                            <label class="block text-sm font-medium text-gray-700 mb-2">سال ورودی</label>
+                            <input type="text" name="entry_year" value="{{ old('entry_year') }}"
+                                placeholder="مثال: ۱۳۹۸"
                                 class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 سال فراغت <span class="text-red-500">*</span>
                             </label>
-                            <input type="text" name="graduation_year" required placeholder="مثال: ۱۴۰۲"
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all">
+                            <input type="text" name="graduation_year" required value="{{ old('graduation_year') }}"
+                                placeholder="مثال: ۱۴۰۲"
+                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all @error('graduation_year') border-red-400 @enderror">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                درجه تحصیلی
-                            </label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">درجه تحصیلی</label>
                             <select name="degree"
                                 class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-white">
                                 <option value="">انتخاب کنید</option>
-                                <option value="bachelor">لیسانس</option>
-                                <option value="master">ماستر</option>
-                                <option value="phd">دکترا</option>
+                                <option value="bachelor" {{ old('degree') === 'bachelor' ? 'selected' : '' }}>لیسانس
+                                </option>
+                                <option value="master" {{ old('degree') === 'master' ? 'selected' : '' }}>ماستر</option>
+                                <option value="phd" {{ old('degree') === 'phd' ? 'selected' : '' }}>دکترا</option>
                             </select>
                         </div>
                     </div>
@@ -184,43 +197,69 @@
                         </svg>
                         اطلاعات شغلی
                     </h2>
-                    
-                    <!-- New Dropdown to trigger job inputs -->
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 آیا در حال حاضر شاغل هستید؟ <span class="text-red-500">*</span>
                             </label>
                             <select name="is_employed" id="is_employed" required
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-white">
+                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-white @error('is_employed') border-red-400 @enderror">
                                 <option value="">انتخاب کنید</option>
-                                <option value="yes">بلی، شاغل هستم</option>
-                                <option value="no">نخیر (بیکار / ادامه تحصیل)</option>
+                                <option value="yes" {{ old('is_employed') === 'yes' ? 'selected' : '' }}>بلی، شاغل هستم
+                                </option>
+                                <option value="no" {{ old('is_employed') === 'no' ? 'selected' : '' }}>نخیر</option>
                             </select>
                         </div>
                     </div>
 
-                    <!-- Job Details (Hidden by default) -->
-                    <div id="job_details" class="grid grid-cols-1 md:grid-cols-3 gap-6 hidden">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                نام شرکت / اداره
+                    <!-- Not Employed: reason checkboxes -->
+                    <div id="not_employed_reason"
+                        class="{{ old('is_employed') === 'no' ? '' : 'hidden' }} mb-6 p-5 bg-gray-50 rounded-xl border border-gray-200">
+                        <label class="block text-sm font-medium text-gray-700 mb-3">
+                            وضعیت فعلی <span class="text-red-500">*</span>
+                        </label>
+                        <div class="flex flex-wrap gap-6">
+                            <label class="flex items-center gap-3 cursor-pointer group">
+                                <input type="checkbox" name="job_status[]" value="بیکار"
+                                    {{ is_array(old('job_status')) && in_array('بیکار', old('job_status')) ? 'checked' : '' }}
+                                    class="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary/30 cursor-pointer">
+                                <span
+                                    class="text-sm font-medium text-gray-700 group-hover:text-primary transition-colors select-none">
+                                    بیکار
+                                </span>
                             </label>
-                            <input type="text" name="company_name" placeholder="نام محل کار"
+                            <label class="flex items-center gap-3 cursor-pointer group">
+                                <input type="checkbox" name="job_status[]" value="ادامه تحصیل"
+                                    {{ is_array(old('job_status')) && in_array('ادامه تحصیل', old('job_status')) ? 'checked' : '' }}
+                                    class="w-5 h-5 rounded border-gray-300 text-primary focus:ring-primary/30 cursor-pointer">
+                                <span
+                                    class="text-sm font-medium text-gray-700 group-hover:text-primary transition-colors select-none">
+                                    ادامه تحصیل
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Job Details (hidden unless employed) -->
+                    <div id="job_details"
+                        class="grid grid-cols-1 md:grid-cols-3 gap-6 {{ old('is_employed') === 'yes' ? '' : 'hidden' }}">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">نام شرکت / اداره</label>
+                            <input type="text" name="company_name" value="{{ old('company_name') }}"
+                                placeholder="نام محل کار"
                                 class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                سمت شغلی
-                            </label>
-                            <input type="text" name="job_title" placeholder="عنوان پوزیشن"
+                            <label class="block text-sm font-medium text-gray-700 mb-2">سمت شغلی</label>
+                            <input type="text" name="job_title" value="{{ old('job_title') }}"
+                                placeholder="عنوان پوزیشن"
                                 class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">
-                                محل کار
-                            </label>
-                            <input type="text" name="work_location" placeholder="ولایت / شهر"
+                            <label class="block text-sm font-medium text-gray-700 mb-2">محل کار</label>
+                            <input type="text" name="work_location" value="{{ old('work_location') }}"
+                                placeholder="ولایت / شهر"
                                 class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all">
                         </div>
                     </div>
@@ -230,13 +269,12 @@
 
             <!-- Action Buttons -->
             <div class="mt-8 flex items-center justify-end gap-4">
-                <button type="button" onclick="window.history.back()"
+                <a href="{{ route('graduates.index') }}"
                     class="px-6 py-3 border border-gray-200 rounded-xl text-gray-600 hover:bg-gray-50 transition-colors flex items-center gap-2">
                     <span>انصراف</span>
-                </button>
-
+                </a>
                 <button type="submit"
-                    class="px-8 py-3 bg-primary text-white rounded-xl hover:bg-primary-dark transition-colors flex items-center gap-2 shadow-sm">
+                    class="px-8 py-3 bg-blue-900 text-white rounded-xl hover:bg-primary-dark transition-colors flex items-center gap-2 shadow-sm">
                     <span>ثبت نهایی فارغ‌التحصیل</span>
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -249,17 +287,73 @@
 
 @push('page_script')
     <script>
-        // Toggle job details based on employment status
-        document.getElementById('is_employed').addEventListener('change', function() {
-            const jobDetails = document.getElementById('job_details');
-            
+        // ── 1. Employment toggle ──────────────────────────────────────────────────
+        const isEmployedSelect = document.getElementById('is_employed');
+        const jobDetails = document.getElementById('job_details');
+        const notEmployedReason = document.getElementById('not_employed_reason');
+
+        isEmployedSelect.addEventListener('change', function() {
             if (this.value === 'yes') {
                 jobDetails.classList.remove('hidden');
+                notEmployedReason.classList.add('hidden');
+                notEmployedReason.querySelectorAll('input[type="checkbox"]')
+                    .forEach(cb => cb.checked = false);
+
+            } else if (this.value === 'no') {
+                jobDetails.classList.add('hidden');
+                jobDetails.querySelectorAll('input').forEach(i => i.value = '');
+                notEmployedReason.classList.remove('hidden');
+
             } else {
                 jobDetails.classList.add('hidden');
-                // Clear inputs when hidden to avoid submitting old/empty data
-                jobDetails.querySelectorAll('input').forEach(input => input.value = '');
+                notEmployedReason.classList.add('hidden');
+                jobDetails.querySelectorAll('input').forEach(i => i.value = '');
+                notEmployedReason.querySelectorAll('input[type="checkbox"]')
+                    .forEach(cb => cb.checked = false);
             }
         });
+
+        // ── 2. Department filter by faculty ──────────────────────────────────────
+        const facultySelect = document.getElementById('faculty_id');
+        const departmentSelect = document.getElementById('department_id');
+        const allDeptOptions = Array.from(departmentSelect.options).slice(1);
+
+        function filterDepartments(selectedFacultyId) {
+            while (departmentSelect.options.length > 1) {
+                departmentSelect.remove(1);
+            }
+
+            if (!selectedFacultyId) {
+                departmentSelect.options[0].text = 'ابتدا دانشکده انتخاب کنید';
+                return;
+            }
+
+            departmentSelect.options[0].text = 'دپارتمنت انتخاب کنید';
+
+            const matching = allDeptOptions.filter(
+                opt => opt.dataset.faculty === selectedFacultyId
+            );
+
+            if (matching.length === 0) {
+                departmentSelect.options[0].text = 'دپارتمنت موجود نیست';
+                return;
+            }
+
+            matching.forEach(opt => departmentSelect.add(opt.cloneNode(true)));
+        }
+
+        facultySelect.addEventListener('change', function() {
+            departmentSelect.value = '';
+            filterDepartments(this.value);
+        });
+
+        // Restore state on validation failure
+        (function() {
+            const oldFaculty = facultySelect.value;
+            if (oldFaculty) filterDepartments(oldFaculty);
+
+            const oldDept = '{{ old('department_id') }}';
+            if (oldDept) departmentSelect.value = oldDept;
+        })();
     </script>
 @endpush

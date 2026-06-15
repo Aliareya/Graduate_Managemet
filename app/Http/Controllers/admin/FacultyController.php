@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Faculty;
 use Illuminate\Http\Request;
 
 class FacultyController extends Controller
@@ -12,7 +13,9 @@ class FacultyController extends Controller
      */
     public function index()
     {
-        return view('admin.pages.facultes.index');
+        $faculties = Faculty::all();
+        // dd($faculties);
+        return view('admin.pages.facultes.index' , compact('faculties'));
     }
 
     /**
@@ -28,7 +31,44 @@ class FacultyController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // dd($request->all());
+        $validated = $request->validate([
+            'name'        => 'required|string|max:255',
+            'code'        => 'required|string|max:50|unique:faculties,code',
+            'head_name'   => 'nullable|string|max:255',
+            'head_email'  => 'nullable|email|max:255',
+            'location'    => 'nullable|string|max:255',
+            'email'       => 'nullable|email|max:255',
+            'description' => 'nullable|string',
+            'image'       => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
+            'status'      => 'required|in:active,inactive',
+        ]);
+
+        $logoPath = null;
+
+        if ($request->hasFile('image')) {
+            $logoPath = $request->file('image')->store('faculties', 'public');
+        }
+
+        Faculty::create([
+            'name'             => $validated['name'],
+            'code'             => $validated['code'],
+            'logo'             => $logoPath,
+            'head_name'        => $validated['head_name'] ?? null,
+            'head_email'       => $validated['head_email'] ?? null,
+            'location'         => $validated['location'] ?? null,
+            'email'            => $validated['email'] ?? null,
+            'description'      => $validated['description'] ?? null,
+            'is_active'        => $validated['status'] === 'active',
+            'show_on_homepage' => true,
+            'phone'            => null,
+            'head_phone'       => null,
+            'established_year' => null,
+        ]);
+
+        return redirect()
+            ->route('facultes.index')
+            ->with('success', 'Faculty created successfully.');
     }
 
     /**
@@ -44,9 +84,9 @@ class FacultyController extends Controller
      */
     public function edit(string $id)
     {
-        if (!auth()->user()->hasPermission('users.create')) {
-            abort(403);
-        }
+        // if (!auth()->user()->hasPermission('users.create')) {
+        //     abort(403);
+        // }
         return view('admin.pages.facultes.edit');
     }
 

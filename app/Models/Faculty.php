@@ -11,9 +11,9 @@ class Faculty extends Model
         'code',
         'established_year',
         'logo',
-        'dean_name',
-        'dean_phone',
-        'dean_email',
+        'head_name',
+        'head_phone',
+        'head_email',
         'phone',
         'email',
         'location',
@@ -21,4 +21,9 @@ class Faculty extends Model
         'show_on_homepage',
         'is_active',
     ];
+
+    public function departments()
+    {
+        return $this->hasMany(Department::class);
+    }
 }
