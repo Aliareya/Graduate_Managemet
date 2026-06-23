@@ -16,8 +16,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('home');
 
     Route::resource('/departments', DepartmentController::class);
+    Route::get('/departments-data', [DepartmentController::class, 'data'])->name('departments.data');
 
     Route::resource('/facultes', FacultyController::class);
+    Route::get('/facultes-data', [FacultyController::class, 'data'])->name('facultes.data');
 
     Route::resource('/graduates', GraduateController::class);
     Route::get('/graduates-data', [GraduateController::class, 'data'])->name('graduates.data');

@@ -1,16 +1,16 @@
 @extends('admin.layouts.adminLayout')
 
 @section('admin_page_content')
-    <div class="p-8">
+    <div class="p-8" dir="rtl">
         <!-- Page Header -->
         <div class="mb-8">
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-800">مدیریت دپارتمنت ها</h1>
-                    <p class="text-gray-500 mt-1">فهرست دپارتمنت های فعال دانشگاه</p>
+                    <h1 class="text-2xl font-bold text-gray-800">مدیریت دپارتمنت‌ها</h1>
+                    <p class="text-gray-500 mt-1">فهرست دپارتمنت‌های فعال دانشگاه</p>
                 </div>
                 <a href="{{ route('departments.create') }}"
-                    class="flex items-center gap-2 px-5 py-2.5 bg-blue-500 text-white rounded-lg hover:bg-primary-dark transition-colors shadow-sm">
+                    class="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                     </svg>
@@ -21,120 +21,220 @@
             <!-- Filter Bar -->
             <div class="mt-6 bg-white rounded-xl border border-gray-200 p-4 flex flex-col md:flex-row gap-4">
                 <div class="flex-1 relative">
-                    <input type="text" placeholder="جستجو بر اساس نام دپارتمان..."
-                        class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                    <input type="text" id="globalSearch" placeholder="جستجو بر اساس نام دپارتمان..."
+                        class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
                     <svg class="w-5 h-5 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2" fill="none"
                         stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                 </div>
-                <select
-                    class="bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary">
+                <select id="facultyFilter"
+                    class="bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
                     <option value="">همه دانشکده‌ها</option>
-                    <option value="cs">دانشکده علوم کامپیوتر</option>
-                    <option value="eco">دانشکده اقتصاد</option>
-                    <option value="eng">دانشکده انجنیری</option>
-                    <option value="law">دانشکده حقوق و علوم سیاسی</option>
-                    <option value="agr">دانشکده زراعت</option>
-                    <option value="lit">دانشکده ادبیات</option>
-                    <option value="med">دانشکده طب</option>
-                    <option value="edu">دانشکده تعلیم و تربیه</option>
-                    <option value="jrn">دانشکده ژورنالیزم</option>
+                    @foreach ($faculties as $faculty)
+                        <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
+                    @endforeach
                 </select>
-                <button
-                    class="flex items-center gap-2 px-4 py-2.5 border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-                    </svg>
-                    <span class="text-sm">فیلترها</span>
-                </button>
+                <div class="flex items-center gap-2">
+                    <label class="text-sm text-gray-600 whitespace-nowrap">تعداد نمایش</label>
+                    <select id="entriesSelect"
+                        class="bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 w-[100px]">
+                        <option value="6">6</option>
+                        <option value="12">12</option>
+                        <option value="24">24</option>
+                        <option value="48">48</option>
+                    </select>
+                </div>
             </div>
         </div>
 
-        <!-- Department Cards Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            @foreach ($departments as $department )
-                <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow">
-                <div class="flex items-start justify-between mb-4">
-                    <div class="flex-1">
-                        <div class="flex items-center gap-2 mb-1">
-                            <span class="text-xs text-primary bg-primary-light px-2 py-0.5 rounded-full">
-                                {{ $department['name'] }}
-                            </span>
-                        </div>
-                        <h3 class="text-lg font-bold text-gray-800 mb-1">دپارتمان {{ $department['name'] }}</h3>
-                        <p class="text-sm text-gray-500">رئیس: {{ $department['head_name'] }}</p>
-                    </div>
-                    <div class="w-12 h-12 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0">
-                        <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
-                        </svg>
-                    </div>
-                </div>
-                <div class="grid grid-cols-1 gap-3 mt-4">
-  
-                    <div class="bg-gray-50 rounded-xl p-3 text-center">
-                        <div class="flex items-center justify-center gap-1 mb-1">
-                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-                            <span class="text-xs text-gray-500"> تعدا فارغان</span>
-                        </div>
-                        <p class="text-xl font-bold text-gray-800">۲۳۴</p>
-                    </div>
+        <!-- Cards Container Wrapper -->
+        <div class="relative min-h-[300px]">
+            <!-- Department Cards Grid -->
+            <div id="cardsContainer" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                <!-- Cards injected here by DataTables -->
+            </div>
 
-                </div>
-                <div class="mt-4 pt-4 border-t border-gray-100 flex items-center justify-between">
-                    <span class="text-xs text-gray-500">آخرین بروزرسانی: {{ $department->updated_at->diffForHumans() }}</span>
-                    <div class="flex items-center gap-2">
-                        <a href={{ route('departments.show' , ['department'=>$department->id]) }}
-                            class="p-1.5 text-gray-400 hover:text-primary hover:bg-primary/10 rounded-lg transition-colors">
-                           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                            </svg>
-                        </a>
-                        <a href={{ route('departments.edit' , ['department'=>$department->id]) }}
-                            class="p-1.5 text-gray-400 hover:text-primary hover:bg-primary/10 rounded-lg transition-colors">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                            </svg>
-                        </a>
-                    </div>
+            <!-- Loading Overlay -->
+            <div id="tableLoading"
+                class="absolute inset-0 bg-white/70 backdrop-blur-sm lex items-center justify-center z-50 hidden rounded-xl border border-gray-100">
+                <div class="flex flex-col items-center gap-3">
+                    <div class="w-10 h-10 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+                    <span class="text-sm text-gray-600 font-medium">در حال بارگذاری...</span>
                 </div>
             </div>
-            @endforeach
-
-            
         </div>
 
         <!-- Pagination -->
-        <div class="mt-8 bg-white rounded-xl border border-gray-200 p-4 flex items-center justify-between">
-            <div class="text-sm text-gray-600">
-                نمایش ۱ تا ۱۰ از ۴۲ دپارتمان
-            </div>
-            <div class="flex items-center gap-2">
-                <button
-                    class="px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50 transition-colors">قبلی</button>
-                <button class="px-4 py-2 bg-primary text-white rounded-lg text-sm">۱</button>
-                <button
-                    class="px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50 transition-colors"></button>
-                <button
-                    class="px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50 transition-colors">۳</button>
-                <button
-                    class="px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50 transition-colors">۴</button>
-                <button
-                    class="px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50 transition-colors"></button>
-                <button
-                    class="px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50 transition-colors">بعدی</button>
-            </div>
+        <div class="mt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="text-sm text-gray-600 dt-info-text"></div>
+            <div class="dt-pagination-custom flex gap-1"></div>
         </div>
+
+        <!-- Hidden Table for DataTables Engine -->
+        <table id="departmentsTable" class="hidden">
+            <thead>
+                <tr>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
     </div>
 @endsection
+
+@push('page_script')
+    <style>
+        .dataTables_filter,
+        .dataTables_length,
+        .dataTables_info,
+        .dataTables_processing {
+            display: none !important;
+        }
+
+        .dataTables_wrapper .dataTables_paginate {
+            float: none !important;
+            margin: 0 !important;
+            display: none;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            padding: 0 !important;
+            margin: 0 !important;
+            background: transparent !important;
+            border: none !important;
+        }
+
+        .custom-paginate-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 2.5rem;
+            height: 2.5rem;
+            padding: 0 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #4b5563;
+            background-color: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none !important;
+            user-select: none;
+        }
+
+        .custom-paginate-btn:hover:not(.disabled):not(.current) {
+            background-color: #f9fafb;
+            color: #1f2937;
+            border-color: #d1d5db;
+        }
+
+        .custom-paginate-btn.current {
+            background-color: #1d4ed8;
+            color: white !important;
+            border-color: #1d4ed8;
+            z-index: 1;
+        }
+
+        .custom-paginate-btn.disabled {
+            color: #9ca3af;
+            background-color: #f9fafb;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        #entriesSelect{
+            text-align: left;
+        }
+        #facultyFilter{
+            width: 250px;
+            text-align: left;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function() {
+            var table = $('#departmentsTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: "{{ route('departments.data') }}",
+                    data: function(d) {
+                        d.faculty_id = $('#facultyFilter').val();
+                    },
+                    beforeSend: () => $('#tableLoading').removeClass('hidden'),
+                    complete: () => $('#tableLoading').addClass('hidden')
+                },
+                columns: [{
+                    data: 'card_html',
+                    name: 'name',
+                    visible: false,
+                    searchable: true
+                }],
+                language: {
+                    paginate: {
+                        previous: "قبلی",
+                        next: "بعدی"
+                    },
+                    info: "نمایش _START_ تا _END_ از _TOTAL_ دپارتمان",
+                    infoEmpty: "هیچ دپارتمانی یافت نشد",
+                    infoFiltered: "(فیلتر شده از _MAX_ دپارتمان کل)",
+                    processing: ""
+                },
+                drawCallback: function(settings) {
+                    var api = this.api();
+                    var $container = $('#cardsContainer').empty();
+
+                    var currentPageData = api.rows({
+                        page: 'current'
+                    }).data().toArray();
+
+                    currentPageData.forEach(function(row) {
+                        if (row.card_html) {
+                            $container.append(row.card_html);
+                        }
+                    });
+
+                    // Rebuild pagination
+                    var $pagination = $('.dataTables_paginate');
+                    var $customContainer = $('.dt-pagination-custom').empty();
+                    $pagination.find('.paginate_button').each(function() {
+                        var $btn = $(this);
+                        var classes = 'custom-paginate-btn';
+                        if ($btn.hasClass('current')) classes += ' current';
+                        if ($btn.hasClass('disabled')) classes += ' disabled';
+
+                        var $newBtn = $('<a>').addClass(classes).html($btn.html())
+                            .attr('href', $btn.attr('href'))
+                            .attr('aria-controls', $btn.attr('aria-controls'))
+                            .attr('data-dt-idx', $btn.attr('data-dt-idx'));
+
+                        $newBtn.on('click', function(e) {
+                            e.preventDefault();
+                            $btn.trigger('click');
+                        });
+                        $customContainer.append($newBtn);
+                    });
+
+                    $('.dt-info-text').html($('.dataTables_info').html());
+                }
+            });
+
+            // Search input
+            $('#globalSearch').on('keyup', function() {
+                table.search(this.value).draw();
+            });
+
+            // Faculty filter
+            $('#facultyFilter').on('change', function() {
+                table.draw();
+            });
+
+            // Entries select
+            $('#entriesSelect').on('change', function() {
+                table.page.len(this.value).draw();
+            });
+        });
+    </script>
+@endpush

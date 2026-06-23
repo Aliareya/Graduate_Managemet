@@ -26,4 +26,16 @@ class Faculty extends Model
     {
         return $this->hasMany(Department::class);
     }
+
+    public function graduates()
+    {
+        return $this->hasManyThrough(
+            Graduate::class,
+            Department::class,
+            'faculty_id',      // Foreign key on departments table
+            'department_id',   // Foreign key on graduates table
+            'id',              // Local key on faculties table
+            'id'               // Local key on departments table
+        );
+    }
 }
