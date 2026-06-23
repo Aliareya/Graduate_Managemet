@@ -84,7 +84,7 @@
 
             <!-- Custom Loading Overlay -->
             <div id="tableLoading"
-                class="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-20 hidden">
+                class="absolute inset-0 bg-white/80 backdrop-blur-sm  items-center justify-center z-20 hidden">
                 <div class="flex flex-col items-center gap-3">
                     <div class="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
                     <span class="text-sm text-gray-600 font-medium">در حال بارگذاری...</span>
