@@ -31,7 +31,7 @@ return [
     'edit'               => 'Edit',
 
     // Pagination
-    'showing'            => 'Showing 1 to 10 of 2,486 graduates',
+    'showing'            => 'Show entries',
     'previous'           => 'Previous',
     'next'               => 'Next',
 

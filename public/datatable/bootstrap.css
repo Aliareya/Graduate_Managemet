@@ -1,0 +1,206 @@
+/* Minimal Bootstrap Table CSS */
+table {
+    width: 100%;
+    margin-bottom: 1rem;
+    color: #212529;
+    border-collapse: collapse;
+}
+
+table th,
+table td {
+    padding: 0.75rem;
+    vertical-align: top;
+    border-top: 1px solid #dee2e6;
+}
+
+table th {
+    text-align: inherit;
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #dee2e6;
+}
+
+table tbody tr:nth-child(odd) {
+    background-color: #f2f2f2;
+}
+
+table tbody tr:hover {
+    background-color: #e9ecef;
+}
+
+table .table-sm th,
+table .table-sm td {
+    padding: 0.3rem;
+}
+
+
+/* Bootstrap Pagination Styles */
+
+/* Pagination container */
+.pagination {
+    display: inline-block;
+    padding-left: 0;
+    list-style: none;
+    border-radius: 0.25rem;
+}
+
+.pagination li {
+    display: inline;
+}
+
+.pagination li a,
+.pagination li span {
+    position: relative;
+    display: block;
+    padding: 0.5rem 0.75rem;
+    margin-left: -1px;
+    line-height: 1.25;
+    color: #007bff;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    text-decoration: none;
+    border-radius: 0.25rem;
+}
+
+.pagination li a:hover,
+.pagination li span:hover {
+    color: #0056b3;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+}
+
+.pagination .active a,
+.pagination .active span {
+    z-index: 1;
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.pagination .disabled a,
+.pagination .disabled span {
+    color: #6c757d;
+    pointer-events: none;
+    background-color: #fff;
+    border-color: #dee2e6;
+}
+
+.pagination-lg li a,
+.pagination-lg li span {
+    padding: 0.75rem 1.25rem;
+    font-size: 1.25rem;
+}
+
+.pagination-sm li a,
+.pagination-sm li span {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
+
+.pagination .page-item {
+    display: inline-block;
+    font-size: 1rem;
+}
+
+.pagination .page-item:first-child a,
+.pagination .page-item:first-child span {
+    border-radius: 0.25rem 0 0 0.25rem;
+}
+
+.pagination .page-item:last-child a,
+.pagination .page-item:last-child span {
+    border-radius: 0 0.25rem 0.25rem 0;
+}
+
+
+/* .row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -15px;
+    margin-left: -15px;
+  } */
+
+
+
+  /* Modal Background Overlay */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1040;
+}
+
+/* Modal Container */
+.modal-dialog {
+    position: relative;
+    margin: 10% auto;
+    max-width: 500px;
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: white;
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+/* Modal Header */
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: #f1f1f1;
+}
+
+.modal-title {
+    margin: 0;
+}
+
+.close {
+    font-size: 1.5rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+/* Modal Body */
+.modal-body {
+    padding: 1rem;
+}
+
+/* Modal Footer */
+.modal-footer {
+    padding: 1rem;
+    text-align: right;
+    background-color: #f1f1f1;
+}
+
+/* Button Styles */
+.btn {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+
+  
+
+
+

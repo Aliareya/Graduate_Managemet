@@ -1,0 +1,6 @@
+{
+    "paginate":{
+        "first" : "First",
+        "last" : "Last"
+    }
+}

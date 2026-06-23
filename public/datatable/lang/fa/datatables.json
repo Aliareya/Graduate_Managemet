@@ -1,0 +1,24 @@
+{
+    "decimal":        "",
+    "emptyTable":     "دراین بخش اطلاعاتی موجود نیست",
+    "info":           "صفحه _START_ از _END_ مجموع _TOTAL_ صفحات",
+    "infoEmpty":      "صفحه 0 از 0 مجموع 0 صفحات",
+    "infoFiltered":   "(فلترشده از _MAX_ مجموع صفحات)",
+    "infoPostFix":    "",
+    "thousands":      ",",
+    "lengthMenu":     "نمایش _MENU_ ردیف",
+    "loadingRecords": "Loading...",
+    "processing":     "لطفا منتظر باشید...",
+    "search":         "جستجو:",
+    "zeroRecords":    "هیچ ریکارد یافت نشد!",
+    "paginate": {
+        "first":      "اول",
+        "last":       "آخر",
+        "next":       "بعدی",
+        "previous":   "قبلی"
+    },
+    "aria": { 
+        "sSortAscending":  ": فعال سازی نمایش به صورت صعودی",
+        "sSortDescending": ": فعال سازی نمایش به صورت نزولی"
+    }
+}

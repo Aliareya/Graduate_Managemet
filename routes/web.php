@@ -20,6 +20,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('/facultes', FacultyController::class);
 
     Route::resource('/graduates', GraduateController::class);
+    Route::get('/graduates-data', [GraduateController::class, 'data'])->name('graduates.data');
 
     Route::resource('/users', UserController::class)->only('index', 'edit', 'update');
 

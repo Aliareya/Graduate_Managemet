@@ -31,7 +31,7 @@ return [
     'edit'               => 'ویرایش',
 
     // Pagination
-    'showing'            => 'نمایش ۱ تا ۱۰ از ۲,۴۸۶ فارغ',
+    'showing'            => "انتخاب تعداد نمایش",
     'previous'           => 'قبلی',
     'next'               => 'بعدی',
 

@@ -1,0 +1,9 @@
+{
+    "search":"Search",
+    "processing":"processing...",
+    "paginate":{
+        "first" : "First",
+        "last" : "Last",
+        "next" : "Next"
+    }
+}

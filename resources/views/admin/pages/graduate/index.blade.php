@@ -1,6 +1,7 @@
 @extends('admin.layouts.adminLayout')
+
 @section('admin_page_content')
-    <div class="p-8">
+    <div class="p-8" dir="rtl">
         <!-- Page Header -->
         <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div>
@@ -26,106 +27,255 @@
             </div>
         </div>
 
-        <!-- Filters -->
-        <div class="bg-white rounded-xl border border-gray-200 p-4 mb-6 shadow-sm">
-            <div class="flex flex-col md:flex-row gap-4">
-                <div class="flex-1 relative">
-                    <input type="text" placeholder="@lang('graduate.search_placeholder')"
-                        class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary">
+        <!-- Table Container -->
+        <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden relative">
+
+            <!-- TOP: Search & Entries -->
+            <div
+                class="p-4 border-b border-gray-200 flex flex-col md:flex-row justify-between items-center gap-4 z-10 relative">
+                <div class="flex items-center gap-2">
+                    <label class="text-sm text-gray-600 whitespace-nowrap">@lang('graduate.showing', ['default' => 'نمایش ورودی‌ها'])</label>
+                    <select id="entriesSelect"
+                        class="bg-gray-50 border border-gray-200 text-gray-700 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                </div>
+
+                <div class="relative w-full md:w-64">
+                    <input type="text" id="globalSearch" placeholder="@lang('graduate.search_placeholder')"
+                        class="w-full bg-gray-50 border border-gray-200 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block pr-10 pl-4 p-2.5 text-right">
                     <svg class="w-5 h-5 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2" fill="none"
                         stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                     </svg>
                 </div>
-                <button
-                    class="flex items-center gap-2 px-4 py-2.5 border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-                    </svg>
-                    <span class="text-sm">@lang('graduate.filters')</span>
-                </button>
             </div>
-        </div>
 
-        <!-- Table -->
-        <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden">
-            <div class="overflow-x-auto">
-                <table class="w-full">
-                    <thead class="bg-gray-50 border-b border-gray-200">
+            <!-- Table Body (Fixed Structure) -->
+            <div class="overflow-x-auto min-h-[300px]">
+                <table id="graduatesTable" class="w-full text-sm text-right text-gray-500">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-50 border-b border-gray-200">
                         <tr>
-                            <th class="text-right text-xs font-medium text-gray-500 px-6 py-4">@lang('graduate.full_name')</th>
-                            <th class="text-right text-xs font-medium text-gray-500 px-6 py-4">@lang('graduate.student_id')</th>
-                            <th class="text-right text-xs font-medium text-gray-500 px-6 py-4">@lang('graduate.faculty')</th>
-                            <th class="text-right text-xs font-medium text-gray-500 px-6 py-4">@lang('graduate.department')</th>
-                            <th class="text-right text-xs font-medium text-gray-500 px-6 py-4">@lang('graduate.graduation_year')</th>
-                            <th class="text-right text-xs font-medium text-gray-500 px-6 py-4">@lang('graduate.employment_status')</th>
-                            <th class="text-right text-xs font-medium text-gray-500 px-6 py-4">@lang('graduate.actions')</th>
+                            <th scope="col" class="px-6 py-4 text-right">@lang('graduate.full_name')</th>
+                            <th scope="col" class="px-6 py-4 text-right">@lang('graduate.student_id')</th>
+                            <th scope="col" class="px-6 py-4 text-right">@lang('graduate.faculty')</th>
+                            <th scope="col" class="px-6 py-4 text-right">@lang('graduate.department')</th>
+                            <th scope="col" class="px-6 py-4 text-right">@lang('graduate.graduation_year')</th>
+                            <th scope="col" class="px-6 py-4 text-right">@lang('graduate.employment_status')</th>
+                            <th scope="col" class="px-6 py-4 text-right">@lang('graduate.actions')</th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-gray-100">
-                        @foreach ($graduate as $grad)
-                            <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="px-6 py-4">
-                                    <span class="font-medium text-gray-800">{{ $grad['first_name'] }}
-                                        {{ $grad['last_name'] }} </span>
-                                </td>
-                                <td class="px-6 py-4 text-sm text-gray-600 font-mono">{{ $grad['student_id'] }} </td>
-                                <td class="px-6 py-4 text-sm text-gray-600">{{ $grad['faculty']['name'] }} </td>
-                                <td class="px-6 py-4 text-sm text-gray-600">{{ $grad['department']['name'] }} </td>
-                                <td class="px-6 py-4 text-sm text-gray-600">{{ $grad['graduation_year'] }} </td>
-                                <td class="px-6 py-4">
-                                    <span
-                                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-success-light text-success">
-                                    @if ($grad['is_employed'] === "yes")
-                                    @lang('graduate.employed')
-                                    @endif
-                                    @if ($grad['is_employed'] === "no")
-                                    {{ $grad['job_status'] }}
-                                    @endif
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center gap-2">
-                                        <a href={{ route('graduates.show' , ['graduate'=>$grad->id]) }}
-                                            class="p-2 text-gray-400 hover:text-primary hover:bg-primary/10 rounded-lg transition-colors"
-                                            title="@lang('graduate.view')">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                            </svg>
-                                        </a>
-                                        <a  href={{ route('graduates.edit' , ['graduate'=>$grad->id]) }} class="p-2 text-gray-400 hover:text-primary hover:bg-primary/10 rounded-lg transition-colors"
-                                            title="@lang('graduate.edit')">
-                                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                                            </svg>
-                                        </a>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
-
+                    <tbody class="">
+                        <!-- Data loaded via AJAX -->
                     </tbody>
                 </table>
             </div>
 
-            <!-- Pagination -->
-            <div class="border-t border-gray-200 px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
-                <div class="text-sm text-gray-600">
-                    @lang('graduate.showing')
-                </div>
-                <div class="flex items-center gap-2">
-                    <button
-                        class="px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50 transition-colors">@lang('graduate.previous')</button>
-                    <button
-                        class="px-4 py-2 border border-gray-200 rounded-lg text-sm text-gray-600 hover:bg-gray-50 transition-colors">@lang('graduate.next')</button>
+            <!-- BOTTOM: Pagination & Info -->
+            <div
+                class="p-4 border-t border-gray-200 flex flex-col md:flex-row items-center justify-between gap-4 z-10 relative">
+                <div class="text-sm text-gray-600 dt-info-text"></div>
+                <div class="dt-pagination-custom flex gap-1"></div>
+            </div>
+
+            <!-- Custom Loading Overlay -->
+            <div id="tableLoading"
+                class="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-20 hidden">
+                <div class="flex flex-col items-center gap-3">
+                    <div class="w-8 h-8 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+                    <span class="text-sm text-gray-600 font-medium">در حال بارگذاری...</span>
                 </div>
             </div>
         </div>
     </div>
 @endsection
+
+@push('page_script')
+    <style>
+        /* Hide ALL default DataTables controls */
+        .dataTables_filter,
+        .dataTables_length,
+        .dataTables_info,
+        .dataTables_processing {
+            display: none !important;
+        }
+
+        /* Reset default pagination */
+        .dataTables_wrapper .dataTables_paginate {
+            display: none;
+            float: none !important;
+            text-align: center !important;
+            margin: 0 !important;
+        }
+
+        #graduatesTable tbody {}
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            padding: 0 !important;
+            margin: 0 !important;
+            background: transparent !important;
+            border: none !important;
+        }
+
+        /* Custom Pagination Buttons */
+        .custom-paginate-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 2.5rem;
+            height: 2.5rem;
+            padding: 0 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #4b5563;
+            background-color: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none !important;
+            user-select: none;
+        }
+
+        .custom-paginate-btn:hover:not(.disabled):not(.current) {
+            background-color: #f9fafb;
+            color: #1f2937;
+            border-color: #d1d5db;
+        }
+
+        .custom-paginate-btn.current {
+            background-color: #1d4ed8;
+            color: white !important;
+            border-color: #1d4ed8;
+            z-index: 1;
+        }
+
+        .custom-paginate-btn.disabled {
+            color: #9ca3af;
+            background-color: #f9fafb;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        /* Table Cell Padding (Applied correctly to TD) */
+        #graduatesTable tbody td {
+            padding-top: 1.25rem !important;
+            padding-left: 2px !important;
+            padding-right: 20px !important;
+            padding-bottom: 1.25rem !important;
+            vertical-align: middle;
+        }
+
+        #graduatesTable tbody tr {
+            border-bottom: 1px solid rgb(227, 224, 224);
+        }
+        #entriesSelect{
+            width: 150px;
+            text-align: left;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function() {
+            var table = $('#graduatesTable').DataTable({
+                processing: true, // Enable processing indicator
+                serverSide: true,
+                ajax: {
+                    url: "{{ route('graduates.data') }}",
+                    // Show/Hide custom loader on AJAX events
+                    beforeSend: function() {
+                        $('#tableLoading').removeClass('hidden');
+                    },
+                    complete: function() {
+                        $('#tableLoading').addClass('hidden');
+                    }
+                },
+                columns: [{
+                        data: 'full_name',
+                        name: 'full_name'
+                    },
+                    {
+                        data: 'student_id',
+                        name: 'student_id'
+                    },
+                    {
+                        data: 'faculty_name',
+                        name: 'faculty.name'
+                    },
+                    {
+                        data: 'department_name',
+                        name: 'department.name'
+                    },
+                    {
+                        data: 'graduation_year',
+                        name: 'graduation_year'
+                    },
+                    {
+                        data: 'employment_status',
+                        name: 'is_employed',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'actions',
+                        name: 'actions',
+                        orderable: false,
+                        searchable: false
+                    }
+                ],
+                language: {
+                    paginate: {
+                        previous: "@lang('graduate.previous')",
+                        next: "@lang('graduate.next')"
+                    },
+                    info: "نمایش _START_ تا _END_ از _TOTAL_ رکورد",
+                    infoEmpty: "هیچ رکوردی یافت نشد",
+                    infoFiltered: "(فیلتر شده از _MAX_ رکورد کل)",
+                    processing: "" // Empty string since we use custom loader
+                },
+                drawCallback: function(settings) {
+                    var $pagination = $('.dataTables_paginate');
+                    var $customContainer = $('.dt-pagination-custom').empty();
+
+                    // Rebuild pagination buttons
+                    $pagination.find('.paginate_button').each(function() {
+                        var $btn = $(this);
+                        var html = $btn.html();
+                        var classes = 'custom-paginate-btn';
+
+                        if ($btn.hasClass('current')) classes += ' current';
+                        if ($btn.hasClass('disabled')) classes += ' disabled';
+
+                        var $newBtn = $('<a>')
+                            .addClass(classes)
+                            .html(html)
+                            .attr('href', $btn.attr('href'))
+                            .attr('aria-controls', $btn.attr('aria-controls'))
+                            .attr('data-dt-idx', $btn.attr('data-dt-idx'))
+                            .attr('tabindex', $btn.attr('tabindex'));
+
+                        $newBtn.on('click', function(e) {
+                            e.preventDefault();
+                            $btn.trigger('click');
+                        });
+
+                        $customContainer.append($newBtn);
+                    });
+
+                    $('.dt-info-text').html($('.dataTables_info').html());
+                }
+            });
+
+            $('#globalSearch').on('keyup', function() {
+                table.search(this.value).draw();
+            });
+            $('#entriesSelect').on('change', function() {
+                table.page.len(this.value).draw();
+            });
+        });
+    </script>
+@endpush

@@ -7,6 +7,7 @@ use App\Models\Department;
 use App\Models\Faculty;
 use App\Models\Graduate;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 
 class GraduateController extends Controller
 {
@@ -15,26 +16,102 @@ class GraduateController extends Controller
      */
     public function index()
     {
-        $graduate = Graduate::select(
-            'id',
-            'first_name',
-            'last_name',
-            'student_id',
-            'graduation_year',
-            'is_employed',
-            'job_status',
-            'department_id',
-            'faculty_id'
-        )->with([
-            'department:id,name',
-            'faculty:id,name'
-        ])
-            ->get();
-
-        // dd($graduate);
-        return view('admin.pages.graduate.index', compact('graduate'));
+        // Return view without data; DataTables will fetch it via AJAX
+        return view('admin.pages.graduate.index');
     }
 
+    public function data(Request $request)
+    {
+        $query = Graduate::query()
+            ->select([
+                'id',
+                'first_name',
+                'last_name',
+                'student_id',
+                'graduation_year',
+                'is_employed',
+                'job_status',
+                'department_id',
+                'faculty_id'
+            ])
+            ->with([
+                'department:id,name',
+                'faculty:id,name'
+            ]);
+
+        return DataTables::of($query)
+            // 1. Updated full_name column to include Avatar HTML
+            ->addColumn('full_name', function ($row) {
+                $fullName = e($row->first_name . ' ' . $row->last_name);
+
+                // Get the first character (mb_substr supports Persian/Arabic/English)
+                $firstLetter = e(mb_substr($row->first_name, 0, 1));
+
+                // Array of Tailwind color classes for the avatar background
+                $colors = [
+                    'bg-blue-100 text-blue-700',
+                    'bg-green-100 text-green-700',
+                    'bg-purple-100 text-purple-700',
+                    'bg-pink-100 text-pink-700',
+                    'bg-yellow-100 text-yellow-700',
+                    'bg-red-100 text-red-700',
+                    'bg-indigo-100 text-indigo-700'
+                ];
+
+                // Generate a consistent color based on the user's name
+                $colorClass = $colors[abs(crc32($row->first_name)) % count($colors)];
+
+                return '<div class="flex items-center gap-2.5">
+            <img
+                src="' . asset('images/herat.jpg') . '"
+                alt="' . $fullName . '"
+                class="w-8 h-8 rounded-full object-cover"
+            >
+            <span class="font-medium text-gray-800">' . $fullName . '</span>
+        </div>';
+            })
+
+            ->addColumn('faculty_name', fn($row) => e($row->faculty?->name ?? '-'))
+            ->addColumn('department_name', fn($row) => e($row->department?->name ?? '-'))
+
+            ->addColumn('employment_status', function ($row) {
+                $text = '';
+                if ($row->is_employed === 'yes') {
+                    $text = __('graduate.employed');
+                } else {
+                    $text = e($row->job_status);
+                }
+                return '<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">' . $text . '</span>';
+            })
+
+            ->addColumn('actions', function ($row) {
+                $showRoute = route('graduates.show', $row->id);
+                $editRoute = route('graduates.edit', $row->id);
+
+                $viewTitle = __('graduate.view');
+                $editTitle = __('graduate.edit');
+
+                return <<<HTML
+            <div class="flex items-center gap-2">
+                <a href="{$showRoute}" class="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="{$viewTitle}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                </a>
+                <a href="{$editRoute}" class="p-2 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" title="{$editTitle}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                    </svg>
+                </a>
+            </div>
+            HTML;
+            })
+
+            // 2. IMPORTANT: Add 'full_name' to rawColumns so the HTML renders correctly
+            ->rawColumns(['full_name', 'employment_status', 'actions'])
+            ->make(true);
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -97,9 +174,9 @@ class GraduateController extends Controller
      */
     public function show(string $id)
     {
-        $graduate = Graduate::with('faculty:id,name' , 'department:id,name')->find($id);
+        $graduate = Graduate::with('faculty:id,name', 'department:id,name')->find($id);
         // dd($graduate);
-        return view('admin.pages.graduate.show' , compact('graduate'));
+        return view('admin.pages.graduate.show', compact('graduate'));
     }
 
     /**
