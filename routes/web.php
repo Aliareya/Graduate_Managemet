@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('home');
+    Route::get('/dashboard-data', [DashboardController::class, 'recentGraduatesData'])->name('dashboard.data');
 
     Route::resource('/departments', DepartmentController::class);
     Route::get('/departments-data', [DepartmentController::class, 'data'])->name('departments.data');
@@ -24,7 +25,14 @@ Route::middleware('auth')->group(function () {
     Route::resource('/graduates', GraduateController::class);
     Route::get('/graduates-data', [GraduateController::class, 'data'])->name('graduates.data');
 
-    Route::resource('/users', UserController::class)->only('index', 'edit', 'update');
+    Route::resource('/users', UserController::class)->only([
+        'index',
+        'show',
+        'edit',
+        'update',
+        'destroy'
+    ]);
+    Route::get('/users-data', [UserController::class, 'data'])->name('users.data');
 
     // Route::get('/users/edit', [UserController::class, 'update'])->name('users.edit');
 

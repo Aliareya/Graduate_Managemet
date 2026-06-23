@@ -1,6 +1,7 @@
 @extends('admin.layouts.adminLayout')
+
 @section('admin_page_content')
-    <main class="p-8">
+    <main class="p-8" dir="rtl">
 
         <!-- Page Title -->
         <div class="mb-8">
@@ -8,9 +9,8 @@
             <p class="text-sm text-gray-500 mt-1">@lang('dashboard.subtitle')</p>
         </div>
 
-    {{-- hero --}}
-        <div
-            class="bg-[#34a898] mb-7 rounded-3xl p-6 md:p-8 text-white relative overflow-hidden animate-slide-up">
+        {{-- Hero Section --}}
+        <div class="bg-[#34a898] mb-7 rounded-3xl p-6 md:p-8 text-white relative overflow-hidden animate-slide-up">
             <div class="absolute top-0 left-0 w-64 h-64 bg-white/10 rounded-full -translate-x-32 -translate-y-32 blur-3xl">
             </div>
             <div
@@ -21,23 +21,23 @@
                     <div class="flex items-center gap-2 mb-3">
                         <span class="px-3 py-1 bg-white/20 backdrop-blur rounded-full text-xs font-medium">
                             <i class="fas fa-circle text-green-400 text-[8px] ml-1 animate-pulse"></i>
-                             @lang('dashboard.system_active')
+                            @lang('dashboard.system_active')
                         </span>
                         <span class="px-3 py-1 bg-white/20 backdrop-blur rounded-full text-xs font-medium">
                             <i class="fas fa-calendar ml-1"></i>
-                            {{-- {{ diffForHumans() }} --}}
+                            {{ now()->format('Y/m/d') }}
                         </span>
                     </div>
                     <h1 class="text-3xl md:text-4xl font-bold mb-2">سلام {{ auth()->user()->name }} 👋</h1>
                     <p class="text-indigo-100 text-sm md:text-base max-w-xl">
-                       @lang('dashboard.welcome_message')
+                        @lang('dashboard.welcome_message')
                     </p>
                 </div>
                 <div class="flex gap-3">
                     <a href="{{ route('graduates.create') }}"
                         class="px-5 py-3 bg-white text-green-700 rounded-xl font-semibold hover:bg-indigo-50 transition-colors shadow-lg flex items-center gap-2">
                         <i class="fas fa-plus"></i>
-                       @lang('dashboard.add_graduate')
+                        @lang('dashboard.add_graduate')
                     </a>
                     <button onclick="exportData()"
                         class="px-5 py-3 bg-white/10 backdrop-blur border border-white/20 text-white rounded-xl font-semibold hover:bg-white/20 transition-colors flex items-center gap-2">
@@ -60,7 +60,7 @@
                                 d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
                         </svg>
                     </div>
-                    <span class="text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded-lg">+/۲٪</span>
+                    <span class="text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded-lg">+۲٪</span>
                 </div>
                 <p class="text-2xl font-bold text-gray-900">{{ $dashboard['total_graduate'] }}</p>
                 <p class="text-xs text-gray-500 mt-1">@lang('dashboard.total_graduates')</p>
@@ -108,7 +108,7 @@
                     <span class="text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded-lg">+۵/۱٪</span>
                 </div>
                 <p class="text-2xl font-bold text-gray-900">{{ $dashboard['total_employe'] }}</p>
-                <p class="text-xs text-gray-500 mt-1"> @lang('dashboard.employed_graduates')</p>
+                <p class="text-xs text-gray-500 mt-1">@lang('dashboard.employed_graduates')</p>
             </div>
 
             <!-- Card 5: Unemployed -->
@@ -123,10 +123,8 @@
                     <span class="text-xs font-semibold text-red-600 bg-red-50 px-2 py-1 rounded-lg">-۱/۸٪</span>
                 </div>
                 <p class="text-2xl font-bold text-gray-900">{{ $dashboard['total_unemploye'] }}</p>
-                <p class="text-xs text-gray-500 mt-1"> @lang('dashboard.unemployed_graduates')</p>
+                <p class="text-xs text-gray-500 mt-1">@lang('dashboard.unemployed_graduates')</p>
             </div>
-
-
 
         </div>
 
@@ -134,88 +132,245 @@
         <div class="grid grid-cols-1 lg:grid-cols-1 gap-6">
 
             <!-- Recent Graduates Table -->
-            <div class="lg:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-sm">
+            <div class="lg:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
                 <div class="flex items-center justify-between px-6 py-5 border-b border-gray-100">
-                    <h2 class="text-lg font-bold text-gray-900"> @lang('dashboard.recent_graduates')</h2>
+                    <h2 class="text-lg font-bold text-gray-900">@lang('dashboard.recent_graduates')</h2>
                     <button
                         class="text-xs text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1 bg-blue-50 px-3 py-1.5 rounded-lg">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                         </svg>
-                       @lang('dashboard.this_week')
+                        @lang('dashboard.this_week')
                     </button>
                 </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full">
-                        <thead>
+
+                <!-- Table Container -->
+                <div class="">
+                    <table id="recentGraduatesTable" class="w-full">
+                        <thead class="bg-gray-50">
                             <tr class="text-xs text-gray-500 border-b border-gray-100">
-                                <th class="text-right px-6 py-3 font-medium"> @lang('dashboard.full_name') </th>
-                                <th class="text-right px-6 py-3 font-medium">@lang('dashboard.faculty')</th>
-                                <th class="text-right px-6 py-3 font-medium">@lang('dashboard.department')</th>
-                                <th class="text-right px-6 py-3 font-medium">@lang('dashboard.graduation_year') </th>
-                                <th class="text-right px-6 py-3 font-medium">@lang('dashboard.status')</th>
+                                <th class="text-right px-6 py-4 font-semibold">فارغ‌التحصیل</th>
+                                <th class="text-right px-6 py-4 font-semibold">دانشکده</th>
+                                <th class="text-right px-6 py-4 font-semibold">دپارتمنت</th>
+                                <th class="text-right px-6 py-4 font-semibold">سال فراغت</th>
+                                <th class="text-right px-6 py-4 font-semibold">وضعیت</th>
                             </tr>
                         </thead>
-                        <tbody class="text-sm">
-                            <tr class="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                                <td class="px-6 py-4 font-semibold text-gray-900">علی احمدی</td>
-                                <td class="px-6 py-4 text-gray-600">کمپیوترساینس</td>
-                                <td class="px-6 py-4 text-gray-600">دیتابیس</td>
-                                <td class="px-6 py-4 text-gray-600">۱۴۰۲</td>
-                                <td class="px-6 py-4">
-                                    <span
-                                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">شاغل</span>
-                                </td>
-                            </tr>
-                            <tr class="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                                <td class="px-6 py-4 font-semibold text-gray-900">زهرا کریمی</td>
-                                <td class="px-6 py-4 text-gray-600">اقتصاد</td>
-                                <td class="px-6 py-4 text-gray-600">مدیریت مالی</td>
-                                <td class="px-6 py-4 text-gray-600">۱۴۰۲</td>
-                                <td class="px-6 py-4">
-                                    <span
-                                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">شاغل</span>
-                                </td>
-                            </tr>
-                            <tr class="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                                <td class="px-6 py-4 font-semibold text-gray-900">محمد رضایی</td>
-                                <td class="px-6 py-4 text-gray-600">انجنیری</td>
-                                <td class="px-6 py-4 text-gray-600">مهندسی نرم‌افزار</td>
-                                <td class="px-6 py-4 text-gray-600">۱۴۰۱</td>
-                                <td class="px-6 py-4">
-                                    <span
-                                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700">بیکار</span>
-                                </td>
-                            </tr>
-                            <tr class="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                                <td class="px-6 py-4 font-semibold text-gray-900">فاطمه نوری</td>
-                                <td class="px-6 py-4 text-gray-600">حقوق و علوم سیاسی</td>
-                                <td class="px-6 py-4 text-gray-600">حقوق خصوصی</td>
-                                <td class="px-6 py-4 text-gray-600">۱۴۲</td>
-                                <td class="px-6 py-4">
-                                    <span
-                                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">شاغل</span>
-                                </td>
-                            </tr>
-                            <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="px-6 py-4 font-semibold text-gray-900">حسین صادقی</td>
-                                <td class="px-6 py-4 text-gray-600">زراعت</td>
-                                <td class="px-6 py-4 text-gray-600">علوم خاک</td>
-                                <td class="px-6 py-4 text-gray-600">۱۴۰۰</td>
-                                <td class="px-6 py-4">
-                                    <span
-                                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700">ادامه
-                                        تحصیل</span>
-                                </td>
-                            </tr>
+                        <tbody class="text-sm divide-y divide-gray-100">
+                            <!-- Data loaded via AJAX -->
                         </tbody>
                     </table>
                 </div>
-            </div>
 
+                <!-- Custom Pagination -->
+                <div
+                    class="px-6 py-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="text-sm text-gray-600 dt-info-text"></div>
+                    <div class="dt-pagination-custom flex gap-1"></div>
+                </div>
+            </div>
 
         </div>
 
     </main>
+
+    @push('page_script')
+        <style>
+            /* Hide default DataTables elements */
+            .dataTables_filter,
+            .dataTables_length,
+            .dataTables_info,
+            .dataTables_processing {
+                display: none !important;
+            }
+
+            .dataTables_wrapper .dataTables_paginate {
+                display: none !important;
+            }
+
+            /* Custom Pagination Styling */
+            .custom-paginate-btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 2.25rem;
+                height: 2.25rem;
+                padding: 0 0.625rem;
+                font-size: 0.875rem;
+                font-weight: 500;
+                color: #6b7280;
+                background-color: white;
+                border: 1px solid #e5e7eb;
+                border-radius: 0.5rem;
+                cursor: pointer;
+                transition: all 0.2s;
+                text-decoration: none !important;
+                user-select: none;
+            }
+
+            .custom-paginate-btn:hover:not(.disabled):not(.current) {
+                background-color: #f9fafb;
+                color: #1f2937;
+                border-color: #d1d5db;
+            }
+
+            .custom-paginate-btn.current {
+                background-color: #34a898;
+                color: white !important;
+                border-color: #34a898;
+                z-index: 1;
+            }
+
+            .custom-paginate-btn.disabled {
+                color: #9ca3af;
+                background-color: #f9fafb;
+                cursor: not-allowed;
+                opacity: 0.7;
+            }
+
+            /* Table Row Hover Effect */
+            #recentGraduatesTable tbody tr {
+                transition: all 0.2s;
+            }
+
+            #recentGraduatesTable tbody td {
+                padding-top: 10px !important;
+                padding-bottom: 10px !important;
+                padding-left: 10px !important;
+                padding-right: 10px !important;
+
+            }
+
+            #recentGraduatesTable tbody tr:hover {
+                background-color: #f9fafb;
+                transform: translateX(-2px);
+            }
+
+            /* Avatar Styling */
+            .avatar-circle {
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-weight: 600;
+                font-size: 0.875rem;
+                flex-shrink: 0;
+            }
+        </style>
+
+        <script>
+            $(document).ready(function() {
+                var table = $('#recentGraduatesTable').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: "{{ route('dashboard.data') }}",
+                    columns: [{
+                            data: 'full_name',
+                            name: 'first_name',
+                            render: function(data, type, row) {
+                                // Generate avatar with first letter
+                                var firstName = row.first_name || '';
+                                var firstLetter = firstName.charAt(0);
+                                var colors = [
+                                    'bg-blue-100 text-blue-700',
+                                    'bg-green-100 text-green-700',
+                                    'bg-purple-100 text-purple-700',
+                                    'bg-pink-100 text-pink-700',
+                                    'bg-indigo-100 text-indigo-700',
+                                    'bg-teal-100 text-teal-700'
+                                ];
+                                var colorClass = colors[row.id % colors.length];
+
+                                return '<div class="flex items-center gap-3">' +
+                                    '<div class="avatar-circle ' + colorClass + '">' + firstLetter +
+                                    '</div>' +
+                                    '<div>' +
+                                    '<div class="font-semibold text-gray-900">' + data + '</div>' +
+                                    '</div>' +
+                                    '</div>';
+                            }
+                        },
+                        {
+                            data: 'faculty_name',
+                            name: 'faculty.name',
+                            className: 'text-gray-600'
+                        },
+                        {
+                            data: 'department_name',
+                            name: 'department.name',
+                            className: 'text-gray-600'
+                        },
+                        {
+                            data: 'graduation_year',
+                            name: 'graduation_year',
+                            className: 'text-gray-600 text-center'
+                        },
+                        {
+                            data: 'employment_status',
+                            name: 'is_employed',
+                            orderable: false,
+                            searchable: false,
+                            className: 'text-center'
+                        }
+                    ],
+                    language: {
+                        processing: "<div class='flex items-center justify-center gap-2 py-8'><div class='w-6 h-6 border-3 border-blue-600 border-t-transparent rounded-full animate-spin'></div><span class='text-sm text-gray-600'>در حال بارگذاری...</span></div>",
+                        info: "نمایش _START_ تا _END_ از _TOTAL_ فارغ‌التحصیل",
+                        infoEmpty: "هیچ رکوردی یافت نشد",
+                        infoFiltered: "(فیلتر شده از _MAX_ رکورد)",
+                        paginate: {
+                            previous: "قبلی",
+                            next: "بعدی"
+                        },
+                        zeroRecords: "هیچ داده‌ای یافت نشد"
+                    },
+                    // Dashboard specific settings
+                    searching: false,
+                    lengthChange: false,
+                    pageLength: 5,
+                    ordering: true,
+                    order: [
+                        [0, 'asc']
+                    ],
+                    drawCallback: function() {
+                        // Rebuild pagination with custom styling
+                        var $pagination = $('.dataTables_paginate');
+                        var $customContainer = $('.dt-pagination-custom').empty();
+
+                        $pagination.find('.paginate_button').each(function() {
+                            var $btn = $(this);
+                            var html = $btn.html();
+                            var classes = 'custom-paginate-btn';
+
+                            if ($btn.hasClass('current')) classes += ' current';
+                            if ($btn.hasClass('disabled')) classes += ' disabled';
+
+                            var $newBtn = $('<a>')
+                                .addClass(classes)
+                                .html(html)
+                                .attr('href', $btn.attr('href'))
+                                .attr('data-dt-idx', $btn.attr('data-dt-idx'));
+
+                            $newBtn.on('click', function(e) {
+                                e.preventDefault();
+                                $btn.trigger('click');
+                            });
+
+                            $customContainer.append($newBtn);
+                        });
+
+                        // Update info text
+                        $('.dt-info-text').html($('.dataTables_info').html());
+                    }
+                });
+            });
+
+            function exportData() {
+                alert('Export functionality');
+            }
+        </script>
+    @endpush
 @endsection

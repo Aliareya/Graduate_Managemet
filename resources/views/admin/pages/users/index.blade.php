@@ -1,8 +1,7 @@
 @extends('admin.layouts.adminLayout')
 
 @section('admin_page_content')
-    <!-- Page Content -->
-    <main class="p-6">
+    <main class="p-6" dir="rtl">
 
         <!-- Stats Cards -->
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
@@ -10,7 +9,7 @@
                 <div class="bg-white rounded-xl border border-gray-200 p-4">
                     <div class="flex items-center justify-between">
                         <div>
-                            <p class="text-sm text-gray-500 mb-1"> {{ $state['title'] }}</p>
+                            <p class="text-sm text-gray-500 mb-1">{{ $state['title'] }}</p>
                             <p class="text-2xl font-bold text-gray-800">{{ $state['total'] }}</p>
                         </div>
                         <div class="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center">
@@ -22,49 +21,20 @@
                     </div>
                 </div>
             @endforeach
-            {{-- <div class="bg-white rounded-xl border border-gray-200 p-4">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm text-gray-500 mb-1">مدیران</p>
-                        <p class="text-2xl font-bold text-gray-800">۵</p>
-                    </div>
-                    <div class="w-12 h-12 bg-red-50 rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                        </svg>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white rounded-xl border border-gray-200 p-4">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm text-gray-500 mb-1">ویرایشگران</p>
-                        <p class="text-2xl font-bold text-gray-800">۸</p>
-                    </div>
-                    <div class="w-12 h-12 bg-green-50 rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                        </svg>
-                    </div>
-                </div>
-            </div> --}}
-
         </div>
 
         <!-- Search & Filter Bar -->
         <div class="bg-white rounded-xl border border-gray-200 p-4 mb-6 flex items-center gap-3">
             <div class="flex-1 relative">
-                <input type="text" placeholder="جستجو بر اساس نام، ایمیل یا نام کاربری..."
-                    class="search-input w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 pr-10 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400/30 focus:border-teal-400">
+                <input type="text" id="globalSearch" placeholder="جستجو بر اساس نام، ایمیل یا نام کاربری..."
+                    class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 pr-10 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400/30 focus:border-teal-400">
                 <svg class="w-5 h-5 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2" fill="none"
                     stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
             </div>
-            <select
+            <select id="roleFilter"
                 class="bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400/30 focus:border-teal-400">
                 <option value="">همه نقش‌ها</option>
                 <option value="super_admin">Super Admin</option>
@@ -72,7 +42,7 @@
                 <option value="editor">Editor</option>
                 <option value="viewer">Viewer</option>
             </select>
-            <select
+            <select id="statusFilter"
                 class="bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-teal-400/30 focus:border-teal-400">
                 <option value="">همه وضعیت‌ها</option>
                 <option value="active">فعال</option>
@@ -82,9 +52,9 @@
         </div>
 
         <!-- Data Table -->
-        <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <div class="bg-white rounded-xl border border-gray-200 overflow-hidden relative">
             <div class="overflow-x-auto">
-                <table class="w-full">
+                <table id="usersTable" class="w-full">
                     <thead>
                         <tr class="border-b border-gray-100 bg-gray-50">
                             <th class="text-right text-xs font-medium text-gray-500 px-6 py-4">کاربر</th>
@@ -96,96 +66,186 @@
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-50">
-                        <!-- Row 1 - Super Admin -->
-                        @foreach ($users as $user)
-                            <tr class="table-row transition-colors">
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center gap-3">
-                                        <div
-                                            class="w-10 h-10 bg-gradient-to-br from-teal-400 to-blue-500 rounded-full flex items-center justify-center text-white font-bold text-sm">
-                                            AE
-                                        </div>
-                                        <div>
-                                            <p class="font-semibold text-gray-800 text-sm">{{ $user['name'] }}</p>
-                                            <p class="text-xs text-gray-500">{{ $user['email'] }}</p>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4">
-                                    <span
-                                        class="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium bg-purple-50 text-purple-700 border border-purple-200">
-                                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                                        </svg>
-                                        @foreach ($user['roles'] as $role)
-                                            {{ $role['name'] }}
-                                        @endforeach
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4">
-                                    @if ($user['status'] === 'active')
-                                        <span
-                                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-green-50 text-green-700 border border-green-200">
-                                            <span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>
-                                            فعال
-                                        </span>
-                                    @else
-                                        <span
-                                            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium bg-red-100 text-red-700 border border-red-200">
-                                            <span class="w-1.5 h-1.5 bg-red-500 rounded-full"></span>
-                                            غیر فعال
-                                        </span>
-                                    @endif
-
-                                </td>
-                                <td class="px-6 py-4 text-sm text-gray-600">{{ $user->created_at->format('Y/m/d') }}</td>
-                                <td class="px-6 py-4 text-sm text-gray-600">
-                                    {{ $user['finaly_login']->diffForHumans() }}
-                                </td>
-                                <td class="px-6 py-4">
-                                    <div class="flex items-center gap-2">
-                                        <button
-                                            class="p-1.5 text-gray-400 hover:text-blue-500 hover:bg-blue-50 rounded-lg transition-colors"
-                                            title="ویرایش">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                                            </svg>
-                                        </button>
-                                        <button
-                                            class="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                                            title="حذف">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
-
-
+                        <!-- Data loaded via AJAX -->
                     </tbody>
                 </table>
             </div>
 
             <!-- Pagination -->
-            <div class="border-t border-gray-100 px-6 py-4 flex items-center justify-between">
-                <p class="text-sm text-gray-500">نمایش ۱ تا ۶ از ۲۴ کاربر</p>
-                <div class="flex items-center gap-2">
-                    <button
-                        class="px-4 py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors">قبلی</button>
-                    <button class="px-3 py-2 bg-teal-400 text-white rounded-lg text-sm font-medium">۱</button>
-                    <button
-                        class="px-3 py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors">۲</button>
-                    <button
-                        class="px-3 py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors">۳</button>
-                    <button
-                        class="px-4 py-2 border border-gray-200 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50 transition-colors">بعدی</button>
+            <div class="border-t border-gray-100 px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p class="text-sm text-gray-500 dt-info-text"></p>
+                <div class="flex items-center gap-2 dt-pagination-custom"></div>
+            </div>
+
+            <!-- Loading Overlay -->
+            <div id="tableLoading"
+                class="absolute inset-0 bg-white/80 backdrop-blur-sm flx items-center justify-center z-50 hidden">
+                <div class="flex flex-col items-center gap-3">
+                    <div class="w-10 h-10 border-4 border-teal-200 border-t-teal-600 rounded-full animate-spin"></div>
+                    <span class="text-sm text-gray-600 font-medium">در حال بارگذاری...</span>
                 </div>
             </div>
         </div>
     </main>
+
+    @push('page_script')
+    <style>
+        /* Hide default DataTables elements */
+        .dataTables_filter, .dataTables_length, .dataTables_info, .dataTables_processing {
+            display: none !important;
+        }
+
+        .dataTables_wrapper .dataTables_paginate {
+            display: none !important;
+        }
+
+        /* Custom Pagination Styling */
+        .custom-paginate-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 2.25rem;
+            height: 2.25rem;
+            padding: 0 0.75rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #6b7280;
+            background-color: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none !important;
+            user-select: none;
+        }
+
+        .custom-paginate-btn:hover:not(.disabled):not(.current) {
+            background-color: #f9fafb;
+            color: #1f2937;
+            border-color: #d1d5db;
+        }
+
+        .custom-paginate-btn.current {
+            background-color: #2dd4bf;
+            color: white !important;
+            border-color: #2dd4bf;
+            z-index: 1;
+        }
+
+        .custom-paginate-btn.disabled {
+            color: #9ca3af;
+            background-color: #f9fafb;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        /* Table Row Hover Effect */
+        #usersTable tbody tr {
+            transition: all 0.2s;
+        }
+
+        #usersTable tbody tr:hover {
+            background-color: #f9fafb;
+        }
+
+        /* Table Cell Padding */
+        #usersTable tbody td {
+            padding-top: 1rem !important;
+            padding-bottom: 1rem !important;
+            padding-left: 10px !important;
+            padding-right: 10px !important;
+            vertical-align: middle;
+        }
+        #user_bg{
+            background: linear-gradient(to right, #06b6d4, #34a89875);
+        }
+        #statusFilter {
+            width: 200px;
+            text-align: left;
+        }
+        #roleFilter{
+            width: 200px;
+            text-align: left;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function() {
+            var table = $('#usersTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: "{{ route('users.data') }}",
+                    data: function(d) {
+                        d.role = $('#roleFilter').val();
+                        d.status = $('#statusFilter').val();
+                    },
+                    beforeSend: () => $('#tableLoading').removeClass('hidden'),
+                    complete: () => $('#tableLoading').addClass('hidden')
+                },
+                columns: [
+                    { data: 'user_info', name: 'name', orderable: true, searchable: true },
+                    { data: 'role_badge', name: 'roles.name', orderable: false, searchable: true },
+                    { data: 'status_badge', name: 'status', orderable: true, searchable: true },
+                    { data: 'created_at_formatted', name: 'created_at', orderable: true, searchable: false },
+                    { data: 'last_login', name: 'finaly_login', orderable: true, searchable: false },
+                    { data: 'actions', name: 'actions', orderable: false, searchable: false }
+                ],
+                language: {
+                    processing: "",
+                    info: "نمایش _START_ تا _END_ از _TOTAL_ کاربر",
+                    infoEmpty: "هیچ کاربری یافت نشد",
+                    infoFiltered: "(فیلتر شده از _MAX_ کاربر)",
+                    paginate: {
+                        previous: "قبلی",
+                        next: "بعدی"
+                    },
+                    zeroRecords: "هیچ داده‌ای یافت نشد"
+                },
+                pageLength: 10,
+                ordering: true,
+                order: [[3, 'desc']],
+                drawCallback: function() {
+                    // Rebuild pagination
+                    var $pagination = $('.dataTables_paginate');
+                    var $customContainer = $('.dt-pagination-custom').empty();
+
+                    $pagination.find('.paginate_button').each(function() {
+                        var $btn = $(this);
+                        var html = $btn.html();
+                        var classes = 'custom-paginate-btn';
+
+                        if ($btn.hasClass('current')) classes += ' current';
+                        if ($btn.hasClass('disabled')) classes += ' disabled';
+
+                        var $newBtn = $('<a>')
+                            .addClass(classes)
+                            .html(html)
+                            .attr('href', $btn.attr('href'))
+                            .attr('data-dt-idx', $btn.attr('data-dt-idx'));
+
+                        $newBtn.on('click', function(e) {
+                            e.preventDefault();
+                            $btn.trigger('click');
+                        });
+
+                        $customContainer.append($newBtn);
+                    });
+
+                    $('.dt-info-text').html($('.dataTables_info').html());
+                }
+            });
+
+            // Search hook
+            $('#globalSearch').on('keyup', function() {
+                table.search(this.value).draw();
+            });
+
+            // Filter hooks
+            $('#roleFilter, #statusFilter').on('change', function() {
+                table.draw();
+            });
+        });
+    </script>
+    @endpush
 @endsection
