@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'system_name' => 'Graduate Management System',
-    'university_name' => 'National University',
+    'system_name' => 'Graduate  System',
+    'university_name' => 'Herat University',
 
     'home' => 'Home',
     'dashboard' => 'Dashboard',

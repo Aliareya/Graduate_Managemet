@@ -97,7 +97,9 @@ class GraduateController extends Controller
      */
     public function show(string $id)
     {
-        return view('admin.pages.graduate.profile');
+        $graduate = Graduate::with('faculty:id,name' , 'department:id,name')->find($id);
+        // dd($graduate);
+        return view('admin.pages.graduate.show' , compact('graduate'));
     }
 
     /**
@@ -105,7 +107,10 @@ class GraduateController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $faculties = Faculty::select('name', 'id')->get();
+        $departments = Department::select('name', 'id', 'faculty_id')->get();
+
+        return view('admin.pages.graduate.edit', compact('faculties', 'departments'));
     }
 
     /**
@@ -121,6 +126,7 @@ class GraduateController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $garduate = Graduate::find($id)->delete();
+        return redirect()->route('graduates.index');
     }
 }

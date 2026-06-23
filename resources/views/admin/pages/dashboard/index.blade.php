@@ -4,8 +4,8 @@
 
         <!-- Page Title -->
         <div class="mb-8">
-            <h1 class="text-2xl font-bold text-gray-900">داشبورد</h1>
-            <p class="text-sm text-gray-500 mt-1">نمای کلی از وضعیت فارغ‌التحصیلان و فعالیت‌های سامانه</p>
+            <h1 class="text-2xl font-bold text-gray-900">@lang('dashboard.title')</h1>
+            <p class="text-sm text-gray-500 mt-1">@lang('dashboard.subtitle')</p>
         </div>
 
     {{-- hero --}}
@@ -21,30 +21,28 @@
                     <div class="flex items-center gap-2 mb-3">
                         <span class="px-3 py-1 bg-white/20 backdrop-blur rounded-full text-xs font-medium">
                             <i class="fas fa-circle text-green-400 text-[8px] ml-1 animate-pulse"></i>
-                            سیستم فعال
+                             @lang('dashboard.system_active')
                         </span>
                         <span class="px-3 py-1 bg-white/20 backdrop-blur rounded-full text-xs font-medium">
                             <i class="fas fa-calendar ml-1"></i>
-                            شنبه، ۱۷ خرداد ۴۰۵
+                            {{-- {{ diffForHumans() }} --}}
                         </span>
                     </div>
-                    <h1 class="text-3xl md:text-4xl font-bold mb-2">سلام، محمد عزیز 👋</h1>
+                    <h1 class="text-3xl md:text-4xl font-bold mb-2">سلام {{ auth()->user()->name }} 👋</h1>
                     <p class="text-indigo-100 text-sm md:text-base max-w-xl">
-                        به داشبورد سیستم فارغان خوش آمدید. امروز <span class="font-bold text-white">۱۲ فارغ‌التحصیل
-                            جدید</span> ثبت شده و <span class="font-bold text-white">۵ فرصت شغلی</span> جدید در انتظار بررسی
-                        است.
+                       @lang('dashboard.welcome_message')
                     </p>
                 </div>
                 <div class="flex gap-3">
-                    <button onclick="openAddModal()"
+                    <a href="{{ route('graduates.create') }}"
                         class="px-5 py-3 bg-white text-green-700 rounded-xl font-semibold hover:bg-indigo-50 transition-colors shadow-lg flex items-center gap-2">
                         <i class="fas fa-plus"></i>
-                        ثبت فارغ جدید
-                    </button>
+                       @lang('dashboard.add_graduate')
+                    </a>
                     <button onclick="exportData()"
                         class="px-5 py-3 bg-white/10 backdrop-blur border border-white/20 text-white rounded-xl font-semibold hover:bg-white/20 transition-colors flex items-center gap-2">
                         <i class="fas fa-download"></i>
-                        خروجی
+                        {{ __('dashboard.logout') }}
                     </button>
                 </div>
             </div>
@@ -64,8 +62,8 @@
                     </div>
                     <span class="text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded-lg">+/۲٪</span>
                 </div>
-                <p class="text-2xl font-bold text-gray-900">۱۲,۴۸۶</p>
-                <p class="text-xs text-gray-500 mt-1">تعداد کل فارغان</p>
+                <p class="text-2xl font-bold text-gray-900">{{ $dashboard['total_graduate'] }}</p>
+                <p class="text-xs text-gray-500 mt-1">@lang('dashboard.total_graduates')</p>
             </div>
 
             <!-- Card 2: Faculties -->
@@ -79,8 +77,8 @@
                     </div>
                     <span class="text-xs font-semibold text-gray-500 bg-gray-100 px-2 py-1 rounded-lg">ثابت</span>
                 </div>
-                <p class="text-2xl font-bold text-gray-900">۹</p>
-                <p class="text-xs text-gray-500 mt-1">تعداد دانشکده‌ها</p>
+                <p class="text-2xl font-bold text-gray-900">{{ $dashboard['total_faculties'] }}</p>
+                <p class="text-xs text-gray-500 mt-1">@lang('dashboard.total_faculties')</p>
             </div>
 
             <!-- Card 3: Departments -->
@@ -94,8 +92,8 @@
                     </div>
                     <span class="text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded-lg">+۲</span>
                 </div>
-                <p class="text-2xl font-bold text-gray-900">۲</p>
-                <p class="text-xs text-gray-500 mt-1">تعداد دپارتمنت‌ها</p>
+                <p class="text-2xl font-bold text-gray-900">{{ $dashboard['total_department'] }}</p>
+                <p class="text-xs text-gray-500 mt-1">@lang('dashboard.total_departments')</p>
             </div>
 
             <!-- Card 4: Employed -->
@@ -109,8 +107,8 @@
                     </div>
                     <span class="text-xs font-semibold text-green-600 bg-green-50 px-2 py-1 rounded-lg">+۵/۱٪</span>
                 </div>
-                <p class="text-2xl font-bold text-gray-900">۸,۹۲۱</p>
-                <p class="text-xs text-gray-500 mt-1">فارغان شاغل</p>
+                <p class="text-2xl font-bold text-gray-900">{{ $dashboard['total_employe'] }}</p>
+                <p class="text-xs text-gray-500 mt-1"> @lang('dashboard.employed_graduates')</p>
             </div>
 
             <!-- Card 5: Unemployed -->
@@ -124,8 +122,8 @@
                     </div>
                     <span class="text-xs font-semibold text-red-600 bg-red-50 px-2 py-1 rounded-lg">-۱/۸٪</span>
                 </div>
-                <p class="text-2xl font-bold text-gray-900">۱,۴۲</p>
-                <p class="text-xs text-gray-500 mt-1">فارغان بیکار</p>
+                <p class="text-2xl font-bold text-gray-900">{{ $dashboard['total_unemploye'] }}</p>
+                <p class="text-xs text-gray-500 mt-1"> @lang('dashboard.unemployed_graduates')</p>
             </div>
 
 
@@ -133,30 +131,30 @@
         </div>
 
         <!-- Bottom Section: Table + Events -->
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 lg:grid-cols-1 gap-6">
 
             <!-- Recent Graduates Table -->
             <div class="lg:col-span-2 bg-white rounded-2xl border border-gray-100 shadow-sm">
                 <div class="flex items-center justify-between px-6 py-5 border-b border-gray-100">
-                    <h2 class="text-lg font-bold text-gray-900">فارغ‌التحصیلان اخیر</h2>
+                    <h2 class="text-lg font-bold text-gray-900"> @lang('dashboard.recent_graduates')</h2>
                     <button
                         class="text-xs text-blue-600 hover:text-blue-700 font-medium flex items-center gap-1 bg-blue-50 px-3 py-1.5 rounded-lg">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                         </svg>
-                        این هفته
+                       @lang('dashboard.this_week')
                     </button>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full">
                         <thead>
                             <tr class="text-xs text-gray-500 border-b border-gray-100">
-                                <th class="text-right px-6 py-3 font-medium">نام و تخلص</th>
-                                <th class="text-right px-6 py-3 font-medium">دانشکده</th>
-                                <th class="text-right px-6 py-3 font-medium">دپارتمنت</th>
-                                <th class="text-right px-6 py-3 font-medium">سال فراغت</th>
-                                <th class="text-right px-6 py-3 font-medium">وضعیت</th>
+                                <th class="text-right px-6 py-3 font-medium"> @lang('dashboard.full_name') </th>
+                                <th class="text-right px-6 py-3 font-medium">@lang('dashboard.faculty')</th>
+                                <th class="text-right px-6 py-3 font-medium">@lang('dashboard.department')</th>
+                                <th class="text-right px-6 py-3 font-medium">@lang('dashboard.graduation_year') </th>
+                                <th class="text-right px-6 py-3 font-medium">@lang('dashboard.status')</th>
                             </tr>
                         </thead>
                         <tbody class="text-sm">
@@ -216,63 +214,6 @@
                 </div>
             </div>
 
-            <!-- Upcoming Events -->
-            <div class="bg-white rounded-2xl border border-gray-100 shadow-sm">
-                <div class="flex items-center gap-2 px-6 py-5 border-b border-gray-100">
-                    <svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    <h2 class="text-lg font-bold text-gray-900">رویدادهای پیش رو</h2>
-                </div>
-                <div class="p-4 space-y-3">
-
-                    <!-- Event 1 -->
-                    <div
-                        class="bg-gray-50 rounded-xl p-4 hover:bg-blue-50 transition-colors cursor-pointer border border-gray-100">
-                        <h3 class="text-sm font-semibold text-gray-900 mb-1">همایش سالانه فارغ‌التحصیلان</h3>
-                        <p class="text-xs text-gray-500 flex items-center gap-1">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-                            ۲۵ سنبله ۱۰۳ · تالار مرکزی
-                        </p>
-                    </div>
-
-                    <!-- Event 2 -->
-                    <div
-                        class="bg-gray-50 rounded-xl p-4 hover:bg-blue-50 transition-colors cursor-pointer border border-gray-100">
-                        <h3 class="text-sm font-semibold text-gray-900 mb-1">نمایشگاه فرصت‌های شغلی</h3>
-                        <p class="text-xs text-gray-500 flex items-center gap-1">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-                            ۱۲ میزان ۱۰۳ · سالن انجنیری
-                        </p>
-                    </div>
-
-                    <!-- Event 3 -->
-                    <div
-                        class="bg-gray-50 rounded-xl p-4 hover:bg-blue-50 transition-colors cursor-pointer border border-gray-100">
-                        <h3 class="text-sm font-semibold text-gray-900 mb-1">کارگاه مهارت‌های ارتباطی</h3>
-                        <p class="text-xs text-gray-500 flex items-center gap-1">
-                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-                            ۳ عقرب ۱۴۰۳ · دانشکده اقتصاد
-                        </p>
-                    </div>
-                </div>
-            </div>
 
         </div>
 

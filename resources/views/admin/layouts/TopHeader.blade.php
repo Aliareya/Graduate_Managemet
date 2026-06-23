@@ -38,6 +38,9 @@
                      <option value="{{ url('/lang/fa') }}" {{ app()->getLocale() == 'fa' ? 'selected' : '' }}>
                          🇦🇫 فارسی
                      </option>
+                     <option value="{{ url('/lang/pa') }}" {{ app()->getLocale() == 'pa' ? 'selected' : '' }}>
+                         pa پشتو
+                     </option>
                  </select>
 
                  <div class="pointer-events-none absolute inset-y-0 right-3 flex items-center">
