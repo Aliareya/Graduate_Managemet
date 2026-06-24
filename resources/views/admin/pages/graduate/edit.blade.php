@@ -38,7 +38,7 @@
                             </label>
                             <input type="text" name="first_name" required value="{{ old('first_name', $graduate->first_name) }}"
                                 placeholder="{{ __('graduate_edit.first_name') }}"
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all @error('first_name') border-red-400 @enderror">
+                                class="w-full px-4 py-3 border border-grsay-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all @error('first_name') border-red-400 @enderror">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -46,7 +46,7 @@
                             </label>
                             <input type="text" name="last_name" required value="{{ old('last_name', $graduate->last_name) }}"
                                 placeholder="{{ __('graduate_edit.last_name') }}"
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all @error('last_name') border-red-400 @enderror">
+                                class="w-full px-4 py-3 border border-gsray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all @error('last_name') border-red-400 @enderror">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -102,7 +102,7 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('graduate_edit.email') }}</label>
                             <input type="email" name="email" value="{{ old('email', $graduate->email) }}" placeholder="example@email.com"
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all @error('email') border-red-400 @enderror">
+                                class="w-full px-4 py-3 border border-grasy-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all @error('email') border-red-400 @enderror">
                         </div>
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('graduate_edit.address') }}</label>
@@ -130,14 +130,14 @@
                             </label>
                             <input type="text" name="student_id" required value="{{ old('student_id', $graduate->student_id) }}"
                                 placeholder="{{ __('graduate_edit.example_student_id') }}"
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all @error('student_id') border-red-400 @enderror">
+                                class="w-full px-4 py-3 border border-grasy-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all @error('student_id') border-red-400 @enderror">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 {{ __('graduate_edit.faculty') }} <span class="text-red-500">{{ __('graduate_edit.required') }}</span>
                             </label>
                             <select name="faculty_id" id="faculty_id" required
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-white @error('faculty_id') border-red-400 @enderror">
+                                class="w-full px-4 py-3 border border-grasy-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-white @error('faculty_id') border-red-400 @enderror">
                                 <option value="">{{ __('graduate_edit.select_faculty') }}</option>
                                 @foreach ($faculties as $faculty)
                                     <option value="{{ $faculty->id }}"
@@ -174,7 +174,7 @@
                             </label>
                             <input type="text" name="graduation_year" required value="{{ old('graduation_year', $graduate->graduation_year) }}"
                                 placeholder="{{ __('graduate_edit.example_year') }}"
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all @error('graduation_year') border-red-400 @enderror">
+                                class="w-full px-4 py-3 border border-grays-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all @error('graduation_year') border-red-400 @enderror">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('graduate_edit.degree') }}</label>
@@ -205,7 +205,7 @@
                                 {{ __('graduate_edit.currently_employed') }} <span class="text-red-500">{{ __('graduate_edit.required') }}</span>
                             </label>
                             <select name="is_employed" id="is_employed" required
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-white @error('is_employed') border-red-400 @enderror">
+                                class="w-full px-4 py-3 border border-gray-20s0 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-white @error('is_employed') border-red-400 @enderror">
                                 <option value="">{{ __('graduate_edit.select') }}</option>
                                 <option value="yes" {{ old('is_employed', $graduate->is_employed) === 'yes' ? 'selected' : '' }}>{{ __('graduate_edit.yes_employed') }}</option>
                                 <option value="no" {{ old('is_employed', $graduate->is_employed) === 'no' ? 'selected' : '' }}>{{ __('graduate_edit.no_not_employed') }}</option>

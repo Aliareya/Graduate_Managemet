@@ -45,7 +45,7 @@
                                             d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                                     </svg>
                                 </div>
-                                <button type="button" id="removeImage" class="hidden absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors shadow-md">
+                                <button type="button" id="removeImage" class="hiddenc absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors shadow-md">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                                     </svg>
@@ -81,7 +81,7 @@
                             </label>
                             <input type="text" name="first_name" required value="{{ old('first_name') }}"
                                 placeholder="{{ __('graduate_create.first_name') }}"
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all @error('first_name') border-red-400 @enderror">
+                                class="w-full px-4 py-3 border border-grcay-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all @error('first_name') border-red-400 @enderror">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -89,7 +89,7 @@
                             </label>
                             <input type="text" name="last_name" required value="{{ old('last_name') }}"
                                 placeholder="{{ __('graduate_create.last_name') }}"
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all @error('last_name') border-red-400 @enderror">
+                                class="w-full px-4 py-3 border border-grcay-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all @error('last_name') border-red-400 @enderror">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -145,7 +145,7 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('graduate_create.email') }}</label>
                             <input type="email" name="email" value="{{ old('email') }}" placeholder="example@email.com"
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all @error('email') border-red-400 @enderror">
+                                class="w-full px-4 py-3 border border-grayc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all @error('email') border-red-400 @enderror">
                         </div>
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('graduate_create.address') }}</label>
@@ -173,14 +173,14 @@
                             </label>
                             <input type="text" name="student_id" required value="{{ old('student_id') }}"
                                 placeholder="{{ __('graduate_create.example_student_id') }}"
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all @error('student_id') border-red-400 @enderror">
+                                class="w-full px-4 py-3 border border-graxy-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all @error('student_id') border-red-400 @enderror">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 {{ __('graduate_create.faculty') }} <span class="text-red-500">{{ __('graduate_create.required') }}</span>
                             </label>
                             <select name="faculty_id" id="faculty_id" required
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-white @error('faculty_id') border-red-400 @enderror">
+                                class="w-full px-4 py-3 border border-xxgray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-white @error('faculty_id') border-red-400 @enderror">
                                 <option value="">{{ __('graduate_create.select_faculty') }}</option>
                                 @foreach ($faculties as $faculty)
                                     <option value="{{ $faculty->id }}"
@@ -217,7 +217,7 @@
                             </label>
                             <input type="text" name="graduation_year" required value="{{ old('graduation_year') }}"
                                 placeholder="{{ __('graduate_create.example_year') }}"
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all @error('graduation_year') border-red-400 @enderror">
+                                class="w-full px-4 py-3 border border-graxy-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all @error('graduation_year') border-red-400 @enderror">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('graduate_create.degree') }}</label>
@@ -248,7 +248,7 @@
                                 {{ __('graduate_create.currently_employed') }} <span class="text-red-500">{{ __('graduate_create.required') }}</span>
                             </label>
                             <select name="is_employed" id="is_employed" required
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-white @error('is_employed') border-red-400 @enderror">
+                                class="w-full px-4 py-3 border border-gra]y-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-white @error('is_employed') border-red-400 @enderror">
                                 <option value="">{{ __('graduate_create.select') }}</option>
                                 <option value="yes" {{ old('is_employed') === 'yes' ? 'selected' : '' }}>{{ __('graduate_create.yes_employed') }}</option>
                                 <option value="no" {{ old('is_employed') === 'no' ? 'selected' : '' }}>{{ __('graduate_create.no_not_employed') }}</option>

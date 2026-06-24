@@ -8,7 +8,6 @@ use App\Models\Faculty;
 use App\Models\Graduate;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
-use Illuminate\Support\Facades\Storage;
 
 class GraduateController extends Controller
 {
@@ -32,6 +31,7 @@ class GraduateController extends Controller
                 'first_name',
                 'last_name',
                 'student_id',
+                'profile_image',
                 'graduation_year',
                 'is_employed',
                 'job_status',
@@ -67,7 +67,7 @@ class GraduateController extends Controller
 
                 return '<div class="flex items-center gap-2.5">
             <img
-                src="' . asset('images/herat.jpg') . '"
+                src="' . asset('storage/graduates/'.$row->profile_image.'') . '"
                 alt="' . $fullName . '"
                 class="w-8 h-8 rounded-full object-cover"
             >
