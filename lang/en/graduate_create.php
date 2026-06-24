@@ -62,4 +62,7 @@ return [
     'example_student_id' => 'Example: 14001234',
     'example_year' => 'Example: 2019',
     'no_departments' => 'No departments available',
+    'profile_image' => 'Profile Image',
+    'choose_image' => 'Choose Image',
+'image_help'   => 'Accepted formats: JPG, PNG, GIF, WebP. Max size: 2MB',
 ];

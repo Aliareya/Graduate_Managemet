@@ -45,7 +45,8 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('/permissions', PermissionController::class)->only(['index', 'create', 'store']);
 
-    Route::get('reports/graduate' , [AdminReportsController::class, 'graduateReports'])->name('reports.graduate');
+    Route::get('/reports/graduate' , [AdminReportsController::class, 'graduateReports'])->name('reports.graduate');
+    Route::get('/reports' , [AdminReportsController::class, 'index'])->name('reports.index');
 });
 
 Route::get('/lang/{locale}', function ($locale) {

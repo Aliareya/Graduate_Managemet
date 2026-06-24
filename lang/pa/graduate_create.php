@@ -62,4 +62,7 @@ return [
     'example_student_id' => 'بیلګه: ۱۴۰۰۱۲۳۴',
     'example_year' => 'بیلګه: ۱۳۹۸',
     'no_departments' => 'هیڅ دیپارتمنت شتون نلري',
+    'profile_image' => 'د پروفایل انځور',
+    'choose_image' => 'انځور غوره کړئ',
+'image_help'   => 'منل شوي فارمیټونه: JPG, PNG, GIF, WebP. اعظمي اندازه: 2MB',
 ];

@@ -17,7 +17,7 @@
             </div>
         @endif
 
-        <form action="{{ route('graduates.store') }}" method="POST" id="graduateForm">
+        <form action="{{ route('graduates.store') }}" method="POST" id="graduateForm" enctype="multipart/form-data">
             @csrf
             <div class="bg-white rounded-2xl border border-gray-200 p-8 shadow-sm space-y-10">
 
@@ -30,6 +30,50 @@
                         </svg>
                         {{ __('graduate_create.personal_info') }}
                     </h2>
+                    
+                    <!-- Image Upload Section -->
+                    <div class="mb-8">
+                        <label class="block text-sm font-medium text-gray-700 mb-3">
+                            {{ __('graduate_create.profile_image') }}
+                        </label>
+                        <div class="flex items-start gap-6">
+                            <!-- Image Preview -->
+                            <div class="relative">
+                                <div id="imagePreview" class="w-32 h-32 rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center bg-gray-50 overflow-hidden">
+                                    <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                                <button type="button" id="removeImage" class="hidden absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors shadow-md">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                </button>
+                            </div>
+                            
+                            <!-- Upload Button -->
+                            <div class="flex-1">
+                                <label for="profile_image" class="cursor-pointer inline-flex items-center gap-2 px-6 py-3 bg-blue-50 text-blue-900 rounded-xl hover:bg-blue-100 transition-colors border border-blue-200">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                                    </svg>
+                                    <span class="font-medium">{{ __('graduate_create.choose_image') }}</span>
+                                </label>
+                                <input type="file" 
+                                       id="profile_image" 
+                                       name="profile_image" 
+                                       accept="image/*"
+                                       class="hidden">
+                                <p class="mt-2 text-xs text-gray-500">{{ __('graduate_create.image_help') }}</p>
+                                @error('profile_image')
+                                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                                @enderror
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -37,7 +81,7 @@
                             </label>
                             <input type="text" name="first_name" required value="{{ old('first_name') }}"
                                 placeholder="{{ __('graduate_create.first_name') }}"
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all @error('first_name') border-rd-400 @enderror">
+                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all @error('first_name') border-red-400 @enderror">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -45,7 +89,7 @@
                             </label>
                             <input type="text" name="last_name" required value="{{ old('last_name') }}"
                                 placeholder="{{ __('graduate_create.last_name') }}"
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all @error('last_name') border-rd-400 @enderror">
+                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all @error('last_name') border-red-400 @enderror">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -101,7 +145,7 @@
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('graduate_create.email') }}</label>
                             <input type="email" name="email" value="{{ old('email') }}" placeholder="example@email.com"
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all @error('email') border-rd-400 @enderror">
+                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all @error('email') border-red-400 @enderror">
                         </div>
                         <div class="md:col-span-2">
                             <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('graduate_create.address') }}</label>
@@ -129,14 +173,14 @@
                             </label>
                             <input type="text" name="student_id" required value="{{ old('student_id') }}"
                                 placeholder="{{ __('graduate_create.example_student_id') }}"
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all @error('student_id') borde-red-400 @enderror">
+                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all @error('student_id') border-red-400 @enderror">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 {{ __('graduate_create.faculty') }} <span class="text-red-500">{{ __('graduate_create.required') }}</span>
                             </label>
                             <select name="faculty_id" id="faculty_id" required
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-white @error('faculty_id') borderred-400 @enderror">
+                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-white @error('faculty_id') border-red-400 @enderror">
                                 <option value="">{{ __('graduate_create.select_faculty') }}</option>
                                 @foreach ($faculties as $faculty)
                                     <option value="{{ $faculty->id }}"
@@ -173,7 +217,7 @@
                             </label>
                             <input type="text" name="graduation_year" required value="{{ old('graduation_year') }}"
                                 placeholder="{{ __('graduate_create.example_year') }}"
-                                class="w-full px-4 py-3 border border-gay-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all @error('graduation_year') border-red-400 @enderror">
+                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all @error('graduation_year') border-red-400 @enderror">
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">{{ __('graduate_create.degree') }}</label>
@@ -204,7 +248,7 @@
                                 {{ __('graduate_create.currently_employed') }} <span class="text-red-500">{{ __('graduate_create.required') }}</span>
                             </label>
                             <select name="is_employed" id="is_employed" required
-                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-white @error('is_employed') border-rd-400 @enderror">
+                                class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all bg-white @error('is_employed') border-red-400 @enderror">
                                 <option value="">{{ __('graduate_create.select') }}</option>
                                 <option value="yes" {{ old('is_employed') === 'yes' ? 'selected' : '' }}>{{ __('graduate_create.yes_employed') }}</option>
                                 <option value="no" {{ old('is_employed') === 'no' ? 'selected' : '' }}>{{ __('graduate_create.no_not_employed') }}</option>
@@ -286,6 +330,54 @@
 
 @push('page_script')
     <script>
+        // ── Image Upload Preview ──────────────────────────────────────────────────
+        const imageInput = document.getElementById('profile_image');
+        const imagePreview = document.getElementById('imagePreview');
+        const removeImageBtn = document.getElementById('removeImage');
+        let currentImageFile = null;
+
+        imageInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            
+            if (file) {
+                // Validate file type
+                if (!file.type.startsWith('image/')) {
+                    alert('{{ __('graduate_invalid_image_type') }}');
+                    this.value = '';
+                    return;
+                }
+                
+                // Validate file size (max 2MB)
+                if (file.size > 2 * 1024 * 1024) {
+                    alert('{{ __('graduate_image_too_large') }}');
+                    this.value = '';
+                    return;
+                }
+                
+                currentImageFile = file;
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    imagePreview.innerHTML = `<img src="${e.target.result}" alt="Preview" class="w-full h-full object-cover">`;
+                    removeImageBtn.classList.remove('hidden');
+                };
+                
+                reader.readAsDataURL(file);
+            }
+        });
+
+        removeImageBtn.addEventListener('click', function() {
+            imageInput.value = '';
+            currentImageFile = null;
+            imagePreview.innerHTML = `
+                <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+            `;
+            removeImageBtn.classList.add('hidden');
+        });
+
         // ── 1. Employment toggle ──────────────────────────────────────────────────
         const isEmployedSelect = document.getElementById('is_employed');
         const jobDetails = document.getElementById('job_details');

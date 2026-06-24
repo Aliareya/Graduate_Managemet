@@ -62,4 +62,7 @@ return [
     'example_student_id' => 'مثال: ۱۴۰۰۱۲۳۴',
     'example_year' => 'مثال: ۱۳۹۸',
     'no_departments' => 'دپارتمنت موجود نیست',
+    'profile_image' => 'تصویر پروفایل',
+    'choose_image' => 'انتخاب تصویر',
+'image_help'   => 'فرمت‌های مجاز: JPG, PNG, GIF, WebP. حداکثر حجم: ۲ مگابایت',
 ];

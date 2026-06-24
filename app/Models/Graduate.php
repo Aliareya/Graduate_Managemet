@@ -33,6 +33,7 @@ class Graduate extends Model
         'company_name',
         'job_title',
         'work_location',
+        "profile_image"
     ];
 
     public function department()

@@ -8,6 +8,7 @@ use App\Models\Faculty;
 use App\Models\Graduate;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\Storage;
 
 class GraduateController extends Controller
 {
@@ -126,6 +127,7 @@ class GraduateController extends Controller
         return view('admin.pages.graduate.create', compact('faculties', 'departments'));
     }
 
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -144,12 +146,26 @@ class GraduateController extends Controller
             'graduation_year' => 'required|string|max:10',
             'degree'          => 'nullable|in:bachelor,master,phd',
             'is_employed'     => 'required|in:yes,no',
-            'job_status'    => 'nullable|array',
-            'job_status.*'  => 'nullable|in:بیکار,ادامه تحصیل',
+            'job_status'      => 'nullable|array',
+            'job_status.*'    => 'nullable|string',
             'company_name'    => 'nullable|string|max:255',
             'job_title'       => 'nullable|string|max:255',
             'work_location'   => 'nullable|string|max:255',
+            'profile_image'   => 'nullable|image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
+
+        // Handle profile image upload
+        if ($request->hasFile('profile_image')) {
+            $image = $request->file('profile_image');
+            $imageName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+
+            // This saves to storage/app/public/graduates
+            $path = $image->storeAs('/graduates', $imageName);
+
+            if ($path) {
+                $validated['profile_image'] = $imageName;
+            }
+        }
 
         // Clean up fields based on employment status
         if ($validated['is_employed'] === 'yes') {
@@ -161,7 +177,6 @@ class GraduateController extends Controller
             $validated['company_name']  = null;
             $validated['job_title']     = null;
             $validated['work_location'] = null;
-            // Convert array ['بیکار', 'ادامه تحصیل'] to comma string for DB
             $validated['job_status']  = !empty($validated['job_status'])
                 ? implode(',', $validated['job_status'])
                 : null;
@@ -170,8 +185,9 @@ class GraduateController extends Controller
         Graduate::create($validated);
 
         return redirect()->route('graduates.index')
-            ->with('success', 'فارغ‌التحصیل با موفقیت ثبت شد.');
+            ->with('success', __('graduate.created_successfully'));
     }
+
     /**
      * Display the specified resource.
      */
@@ -187,10 +203,11 @@ class GraduateController extends Controller
      */
     public function edit(string $id)
     {
+        $graduate = Graduate::findOrFail($id);
         $faculties = Faculty::select('name', 'id')->get();
         $departments = Department::select('name', 'id', 'faculty_id')->get();
 
-        return view('admin.pages.graduate.edit', compact('faculties', 'departments'));
+        return view('admin.pages.graduate.edit', compact('graduate', 'faculties', 'departments'));
     }
 
     /**
@@ -198,7 +215,52 @@ class GraduateController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        // Find the graduate or fail
+        $graduate = Graduate::findOrFail($id);
+
+        // Validate the request
+        $validated = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'father_name' => 'nullable|string|max:255',
+            'gender' => 'nullable|in:male,female',
+            'birth_date' => 'nullable|date',
+            'phone' => 'nullable|string|max:20',
+            'email' => 'nullable|email|max:255',
+            'address' => 'nullable|string',
+            'student_id' => 'required|string|max:255|unique:graduates,student_id,' . $graduate->id,
+            'faculty_id' => 'required|exists:faculties,id',
+            'department_id' => 'nullable|exists:departments,id',
+            'entry_year' => 'nullable|string|max:10',
+            'graduation_year' => 'required|string|max:10',
+            'degree' => 'nullable|in:bachelor,master,phd',
+            'is_employed' => 'required|in:yes,no',
+            'job_status' => 'nullable|array',
+            'company_name' => 'nullable|string|max:255',
+            'job_title' => 'nullable|string|max:255',
+            'work_location' => 'nullable|string|max:255',
+        ]);
+
+        // Handle job_status array - convert to comma-separated string if present
+        if (isset($validated['job_status']) && is_array($validated['job_status'])) {
+            $validated['job_status'] = implode(',', $validated['job_status']);
+        } else {
+            $validated['job_status'] = null;
+        }
+
+        // Clear employment-related fields if not employed
+        if ($validated['is_employed'] === 'no') {
+            $validated['company_name'] = null;
+            $validated['job_title'] = null;
+            $validated['work_location'] = null;
+        }
+
+        // Update the graduate record
+        $graduate->update($validated);
+
+        // Redirect back with success message
+        return redirect()->route('graduates.index')
+            ->with('success', __('graduate.updated_successfully'));
     }
 
     /**
