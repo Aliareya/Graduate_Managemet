@@ -6,22 +6,22 @@
         <div class="mb-8">
             <div class="flex items-center justify-between">
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-800">مدیریت دپارتمنت‌ها</h1>
-                    <p class="text-gray-500 mt-1">فهرست دپارتمنت‌های فعال دانشگاه</p>
+                    <h1 class="text-2xl font-bold text-gray-800">{{ __('department_index.page_title') }}</h1>
+                    <p class="text-gray-500 mt-1">{{ __('department_index.page_subtitle') }}</p>
                 </div>
                 <a href="{{ route('departments.create') }}"
                     class="flex items-center gap-2 px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                     </svg>
-                    <span class="text-sm font-medium">افزودن دپارتمنت</span>
+                    <span class="text-sm font-medium">{{ __('department_index.btn_add') }}</span>
                 </a>
             </div>
 
             <!-- Filter Bar -->
             <div class="mt-6 bg-white rounded-xl border border-gray-200 p-4 flex flex-col md:flex-row gap-4">
                 <div class="flex-1 relative">
-                    <input type="text" id="globalSearch" placeholder="جستجو بر اساس نام دپارتمان..."
+                    <input type="text" id="globalSearch" placeholder="{{ __('department_index.search_placeholder') }}"
                         class="w-full bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
                     <svg class="w-5 h-5 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2" fill="none"
                         stroke="currentColor" viewBox="0 0 24 24">
@@ -31,13 +31,13 @@
                 </div>
                 <select id="facultyFilter"
                     class="bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500">
-                    <option value="">همه دانشکده‌ها</option>
+                    <option value="">{{ __('department_index.filter_all_faculties') }}</option>
                     @foreach ($faculties as $faculty)
                         <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
                     @endforeach
                 </select>
                 <div class="flex items-center gap-2">
-                    <label class="text-sm text-gray-600 whitespace-nowrap">تعداد نمایش</label>
+                    <label class="text-sm text-gray-600 whitespace-nowrap">{{ __('department_index.label_entries') }}</label>
                     <select id="entriesSelect"
                         class="bg-gray-50 border border-gray-200 rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 w-[100px]">
                         <option value="6">6</option>
@@ -58,10 +58,10 @@
 
             <!-- Loading Overlay -->
             <div id="tableLoading"
-                class="absolute inset-0 bg-white/70 backdrop-blur-sm lex items-center justify-center z-50 hidden rounded-xl border border-gray-100">
+                class="absolute inset-0 bg-white/70 backdrop-blur-sm flexx items-center justify-center z-50 hidden rounded-xl border border-gray-100">
                 <div class="flex flex-col items-center gap-3">
                     <div class="w-10 h-10 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
-                    <span class="text-sm text-gray-600 font-medium">در حال بارگذاری...</span>
+                    <span class="text-sm text-gray-600 font-medium">{{ __('department_index.loading_text') }}</span>
                 </div>
             </div>
         </div>
@@ -174,12 +174,12 @@
                 }],
                 language: {
                     paginate: {
-                        previous: "قبلی",
-                        next: "بعدی"
+                        previous: "{{ __('department_index.paginate_prev') }}",
+                        next: "{{ __('department_index.paginate_next') }}"
                     },
-                    info: "نمایش _START_ تا _END_ از _TOTAL_ دپارتمان",
-                    infoEmpty: "هیچ دپارتمانی یافت نشد",
-                    infoFiltered: "(فیلتر شده از _MAX_ دپارتمان کل)",
+                    info: "{{ __('department_index.info_text') }}",
+                    infoEmpty: "{{ __('department_index.info_empty') }}",
+                    infoFiltered: "{{ __('department_index.info_filtered') }}",
                     processing: ""
                 },
                 drawCallback: function(settings) {
