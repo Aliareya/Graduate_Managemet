@@ -16,6 +16,9 @@ class GraduateController extends Controller
      */
     public function index()
     {
+        if (!auth()->user()->hasPermission('graduates.list')) {
+            abort(403);
+        }
         // Return view without data; DataTables will fetch it via AJAX
         return view('admin.pages.graduate.index');
     }

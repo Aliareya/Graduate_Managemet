@@ -17,9 +17,9 @@ class CheckPermission
 
         // Route Name
         $permission = $request->route()->getName();
-
+// dd(auth()->user()->hasPermission($permission));
         // Check Permission
-        if (!auth()->user()->hasPermission($permission)) {
+        if (auth()->user()->hasPermission($permission)) {
 
             abort(403, 'You do not have permission to access this page.');
         }

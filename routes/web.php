@@ -10,6 +10,7 @@ use App\Http\Controllers\admin\RoleController;
 use App\Http\Controllers\admin\SettingController;
 use App\Http\Controllers\admin\UserController;
 use App\Http\Controllers\admin\UserRoleController;
+use App\Http\Controllers\reports\AdminReportsController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth')->group(function () {
@@ -25,23 +26,15 @@ Route::middleware('auth')->group(function () {
     Route::resource('/graduates', GraduateController::class);
     Route::get('/graduates-data', [GraduateController::class, 'data'])->name('graduates.data');
 
-    Route::resource('/users', UserController::class)->only([
-        'index',
-        'show',
-        'edit',
-        'update',
-        'destroy'
-    ]);
+    Route::resource('/users', UserController::class);
     Route::get('/users-data', [UserController::class, 'data'])->name('users.data');
 
-    // Route::get('/users/edit', [UserController::class, 'update'])->name('users.edit');
 
     Route::resource('/roles', RoleController::class);
 
     Route::controller(UserRoleController::class)->group(function () {
         Route::get('/assign-role', 'index')->name('assign-role.index');
         Route::post('/assign-role', 'assignRole')->name('assign-role.store');
-        // Route::delete('/remove-role/{user}/{role}', 'remove')->name('assign-role.destroy');
     });
 
     Route::get('/settings', [SettingController::class, 'index'])->name('setting');
@@ -51,6 +44,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/my-profile/edit', [ProfileController::class, 'update']);
 
     Route::resource('/permissions', PermissionController::class)->only(['index', 'create', 'store']);
+
+    Route::get('reports/graduate' , [AdminReportsController::class, 'graduateReports'])->name('reports.graduate');
 });
 
 Route::get('/lang/{locale}', function ($locale) {

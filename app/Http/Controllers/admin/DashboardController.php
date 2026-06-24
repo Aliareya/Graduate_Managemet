@@ -11,15 +11,18 @@ use Yajra\DataTables\Facades\DataTables; // Add this import
 
 class DashboardController extends Controller
 {
+
     public function index()
     {
-        // Your existing dashboard stats logic
+        if (!auth()->user()->hasPermission('dashboard.view')) {
+            abort(403);
+        }
         $graduate = Graduate::count();
         $faculties = Faculty::count();
         $department = Department::count();
         $employe_graduate = Graduate::where('is_employed', '=', "yes")->count();
         $unemploye_graduate = Graduate::where('is_employed', '=', "no")->count();
-        
+
         $dashboard = [
             "total_graduate" => $graduate,
             "total_faculties" => $faculties,
