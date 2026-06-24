@@ -5,6 +5,8 @@ namespace App\Http\Controllers\admin;
 use App\Http\Controllers\Controller;
 use App\Models\Faculty;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Yajra\DataTables\Facades\DataTables;
 
 class FacultyController extends Controller
@@ -18,32 +20,32 @@ class FacultyController extends Controller
     }
 
     public function data(Request $request)
-{
-    try {
-        $query = Faculty::query()->select(['id', 'name', 'head_name', 'updated_at']);
+    {
+        try {
+            $query = Faculty::query()->select(['id', 'name', 'head_name', 'updated_at']);
 
-        return DataTables::of($query)
-            ->addColumn('card_html', function ($row) {
-                // Use relationships safely with fallback
-                $deptCount = $row->departments()->count();
+            return DataTables::of($query)
+                ->addColumn('card_html', function ($row) {
+                    // Use relationships safely with fallback
+                    $deptCount = $row->departments()->count();
 
-                // For graduates, use try-catch or check if method exists
-                $gradCount = 0;
-                if (method_exists($row, 'graduates')) {
-                    try {
-                        $gradCount = $row->graduates()->count();
-                    } catch (\Exception $e) {
-                        $gradCount = 0;
+                    // For graduates, use try-catch or check if method exists
+                    $gradCount = 0;
+                    if (method_exists($row, 'graduates')) {
+                        try {
+                            $gradCount = $row->graduates()->count();
+                        } catch (\Exception $e) {
+                            $gradCount = 0;
+                        }
                     }
-                }
 
-                // Generate routes
-                $showRoute = route('facultes.show', ['faculte' => $row->id]);
-                $editRoute = route('facultes.edit', ['faculte' => $row->id]);
-                $updatedAt = $row->updated_at->diffForHumans();
+                    // Generate routes
+                    $showRoute = route('facultes.show', ['faculte' => $row->id]);
+                    $editRoute = route('facultes.edit', ['faculte' => $row->id]);
+                    $updatedAt = $row->updated_at->diffForHumans();
 
-                // Use heredoc syntax for clean HTML
-                return <<<HTML
+                    // Use heredoc syntax for clean HTML
+                    return <<<HTML
                 <div class="bg-white rounded-2xl border border-gray-200 p-6 shadow-sm hover:shadow-md transition-shadow">
                     <div class="flex items-start justify-between mb-4">
                         <div class="flex-1">
@@ -94,17 +96,17 @@ class FacultyController extends Controller
                     </div>
                 </div>
                 HTML;
-            })
-            ->rawColumns(['card_html'])
-            ->make(true);
-    } catch (\Exception $e) {
-        // Return error response
-        return response()->json([
-            'error' => $e->getMessage(),
-            'trace' => $e->getTraceAsString()
-        ], 500);
+                })
+                ->rawColumns(['card_html'])
+                ->make(true);
+        } catch (\Exception $e) {
+            // Return error response
+            return response()->json([
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ], 500);
+        }
     }
-}
     /**
      * Show the form for creating a new resource.
      */
@@ -163,7 +165,9 @@ class FacultyController extends Controller
      */
     public function show(string $id)
     {
-        return view('admin.pages.facultes.show');
+        $faculty = Faculty::with('departments', 'graduates')->find($id);
+        // dd($faculty);
+        return view('admin.pages.facultes.show', compact('faculty'));
     }
 
     /**
@@ -171,10 +175,9 @@ class FacultyController extends Controller
      */
     public function edit(string $id)
     {
-        // if (!auth()->user()->hasPermission('users.create')) {
-        //     abort(403);
-        // }
-        return view('admin.pages.facultes.edit');
+        $faculty = Faculty::with(['departments', 'graduates'])->findOrFail($id);
+
+        return view('admin.pages.facultes.edit', compact('faculty'));
     }
 
     /**
@@ -182,7 +185,57 @@ class FacultyController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $faculty = Faculty::findOrFail($id);
+
+        // Validation
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'code' => [
+                'required',
+                'string',
+                'max:50',
+                Rule::unique('faculties', 'code')->ignore($faculty->id),
+            ],
+            'established_year' => 'nullable|integer|min:1000|max:' . date('Y'),
+            'head_name' => 'required|string|max:255',
+            'head_phone' => 'nullable|string|max:20',
+            'head_email' => 'nullable|email|max:255',
+            'location' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:20',
+            'email' => 'nullable|email|max:255',
+            'description' => 'nullable|string|max:500',
+            'status' => 'nullable|in:active,inactive',
+            'show_on_homepage' => 'nullable|boolean',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        // Handle logo upload
+        if ($request->hasFile('logo')) {
+            // Delete old logo if exists
+            if ($faculty->logo) {
+                Storage::disk('public')->delete($faculty->logo);
+            }
+
+            // Store new logo
+            $path = $request->file('logo')->store('faculties/logos', 'public');
+            $validated['logo'] = $path;
+        }
+
+        // Handle boolean field
+        $validated['show_on_homepage'] = $request->has('show_on_homepage') ? 1 : 0;
+
+        // Set default status if not provided
+        if (!isset($validated['status'])) {
+            $validated['status'] = 'active';
+        }
+
+        // Update faculty
+        $faculty->update($validated);
+
+        // Redirect with success message
+        return redirect()
+            ->route('facultes.show', $faculty->id)
+            ->with('success', __('faculty_edit.saved_successfully'));
     }
 
     /**
@@ -190,6 +243,7 @@ class FacultyController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Faculty::find($id)->delete();
+        return redirect()->route('facultes.index');
     }
 }

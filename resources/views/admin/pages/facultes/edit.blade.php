@@ -8,12 +8,12 @@
             <div class="flex items-center justify-between">
                 <div>
                     <div class="flex items-center gap-2 mb-2">
-                        <h1 class="text-2xl font-bold text-gray-800">ویرایش دانشکده</h1>
+                        <h1 class="text-2xl font-bold text-gray-800">{{ __('faculty_edit.page_title') }}</h1>
                         <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
                         </svg>
                     </div>
-                    <p class="text-gray-500">ویرایش اطلاعات دانشکده علوم کامپیوتر</p>
+                    <p class="text-gray-500">{{ __('faculty_edit.page_subtitle') }} {{ $faculty->name }}</p>
                 </div>
                 <!-- Meta Info -->
                 <div class="flex items-center gap-4 text-sm">
@@ -22,14 +22,14 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                         </svg>
-                        <span>آخرین ویرایش: ۱۴۰۳/۰۳/۱۵</span>
+                        <span>{{ __('faculty_edit.last_edit') }}: {{ $faculty->updated_at ? $faculty->updated_at->format('Y/m/d') : '-' }}</span>
                     </div>
                     <div class="flex items-center gap-2 text-gray-500 bg-white px-4 py-2 rounded-lg border border-gray-200">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                         </svg>
-                        <span>ویرایشگر: محمد امینی</span>
+                        <span>{{ __('faculty_edit.editor') }}: {{ auth()->user()->name ?? 'Admin' }}</span>
                     </div>
                 </div>
             </div>
@@ -47,61 +47,78 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                             </svg>
-                            اطلاعات اصلی دانشکده
+                            {{ __('faculty_edit.main_info') }}
                         </h2>
-                        <p class="text-sm text-gray-500">فیلدهای دارای <span class="text-red-500">*</span> الزامی هستند</p>
+                        <p class="text-sm text-gray-500">{!! __('faculty_edit.required_fields') !!}</p>
                     </div>
-                    <!-- Logo -->
+                    {{-- <!-- Logo -->
                     <div class="flex-shrink-0">
                         <label class="block">
                             <div
                                 class="w-24 h-24 bg-blue-50 border-2 border-dashed border-blue-200 rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-primary hover:bg-primary/5 transition-colors group relative overflow-hidden">
                                 <div class="absolute inset-0 bg-gradient-to-br from-blue-100 to-blue-50 opacity-50"></div>
-                                <svg class="w-10 h-10 text-primary relative z-10" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                                </svg>
+                                @if($faculty->logo)
+                                    <img src="{{ asset('storage/' . $faculty->logo) }}" alt="Logo" class="w-full h-full object-cover relative z-10">
+                                @else
+                                    <svg class="w-10 h-10 text-primary relative z-10" fill="none" stroke="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                                    </svg>
+                                @endif
                                 <div
                                     class="absolute bottom-0 left-0 right-0 bg-primary/90 text-white text-xs py-1 text-center opacity-0 group-hover:opacity-100 transition-opacity z-20">
-                                    تغییر لوگو
+                                    {{ __('faculty_edit.change_logo') }}
                                 </div>
                             </div>
-                            <input type="file" class="hidden" accept="image/*">
+                            <input type="file" name="logo" class="hidden" accept="image/*" id="logo_input">
                         </label>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
 
-            <form class="p-8 space-y-8">
+            <form action="{{ route('facultes.update', $faculty->id) }}" method="POST" enctype="multipart/form-data" class="p-8 space-y-8" id="facultyForm">
+                @csrf
+                @method('PUT')
 
                 <!-- Section 1: Basic Information -->
                 <div>
                     <h3 class="text-sm font-bold text-gray-700 mb-4 flex items-center gap-2 pb-2 border-b border-gray-100">
                         <span class="w-1 h-5 bg-primary rounded-full"></span>
-                        اطلاعات پایه
+                        {{ __('faculty_edit.basic_info') }}
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
-                                نام دانشکده <span class="text-red-500">*</span>
+                                {{ __('faculty_edit.faculty_name') }} <span class="text-red-500">*</span>
                             </label>
-                            <input type="text" value="دانشکده علوم کامپیوتر"
-                                class="form-input w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white">
+                            <input type="text" name="name" value="{{ old('name', $faculty->name) }}"
+                                class="form-input w-full px-4 py-3 border border-xgray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white @error('name') border-red-500 @enderror"
+                                required>
+                            @error('name')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
-                                کد دانشکده <span class="text-red-500">*</span>
+                                {{ __('faculty_edit.faculty_code') }} <span class="text-red-500">*</span>
                             </label>
-                            <input type="text" value="CS-001"
-                                class="form-input w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white">
+                            <input type="text" name="code" value="{{ old('code', $faculty->code) }}"
+                                class="form-input w-full px-4 py-3 border border-xgray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white @error('code') border-red-500 @enderror"
+                                required>
+                            @error('code')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
-                                سال تاسیس
+                                {{ __('faculty_edit.established_year') }}
                             </label>
-                            <input type="text" value="۱۳۰"
-                                class="form-input w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white">
+                            <input type="number" name="established_year" value="{{ old('established_year', $faculty->established_year) }}"
+                                class="form-input w-full px-4 py-3 border border-xgray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white @error('established_year') border-red-500 @enderror">
+                            @error('established_year')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
                 </div>
@@ -110,29 +127,39 @@
                 <div>
                     <h3 class="text-sm font-bold text-gray-700 mb-4 flex items-center gap-2 pb-2 border-b border-gray-100">
                         <span class="w-1 h-5 bg-primary rounded-full"></span>
-                        اطلاعات رئیس دانشکده
+                        {{ __('faculty_edit.dean_info') }}
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
-                                نام و تخلص رئیس <span class="text-red-500">*</span>
+                                {{ __('faculty_edit.dean_name') }} <span class="text-red-500">*</span>
                             </label>
-                            <input type="text" value="دکتر کاظم رحیمی"
-                                class="form-input w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white">
+                            <input type="text" name="head_name" value="{{ old('head_name', $faculty->head_name) }}"
+                                class="form-input w-full px-4 py-3 border borderx-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white @error('head_name') border-red-500 @enderror"
+                                required>
+                            @error('head_name')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
-                                شماره تماس رئیس
+                                {{ __('faculty_edit.dean_phone') }}
                             </label>
-                            <input type="tel" value="0799123456"
-                                class="form-input w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white">
+                            <input type="tel" name="head_phone" value="{{ old('head_phone', $faculty->head_phone) }}"
+                                class="form-input w-full px-4 py-3 border bordexr-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white @error('head_phone') border-red-500 @enderror">
+                            @error('head_phone')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
-                                ایمیل رئیس
+                                {{ __('faculty_edit.dean_email') }}
                             </label>
-                            <input type="email" value="rahimi@university.edu"
-                                class="form-input w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white">
+                            <input type="email" name="head_email" value="{{ old('head_email', $faculty->head_email) }}"
+                                class="form-input w-full px-4 py-3 border bordxer-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white @error('head_email') border-red-500 @enderror">
+                            @error('head_email')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
                 </div>
@@ -141,29 +168,38 @@
                 <div>
                     <h3 class="text-sm font-bold text-gray-700 mb-4 flex items-center gap-2 pb-2 border-b border-gray-100">
                         <span class="w-1 h-5 bg-primary rounded-full"></span>
-                        موقعیت و تماس
+                        {{ __('faculty_edit.location_contact') }}
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
-                                موقعیت / ساختمان
+                                {{ __('faculty_edit.location') }}
                             </label>
-                            <input type="text" value="ساختمان اصلی، طبقه دوم"
-                                class="form-input w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white">
+                            <input type="text" name="location" value="{{ old('location', $faculty->location) }}"
+                                class="form-input w-full px-4 py-3 border borderx-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white @error('location') border-red-500 @enderror">
+                            @error('location')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
-                                شماره تماس دانشکده
+                                {{ __('faculty_edit.faculty_phone') }}
                             </label>
-                            <input type="tel" value="020-2345678"
-                                class="form-input w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white">
+                            <input type="tel" name="phone" value="{{ old('phone', $faculty->phone) }}"
+                                class="form-input w-full px-4 py-3 border borderx-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white @error('phone') border-red-500 @enderror">
+                            @error('phone')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
-                                ایمیل دانشکده
+                                {{ __('faculty_edit.faculty_email') }}
                             </label>
-                            <input type="email" value="cs@university.edu"
-                                class="form-input w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white">
+                            <input type="email" name="email" value="{{ old('email', $faculty->email) }}"
+                                class="form-input w-full px-4 py-3 border bordexr-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white @error('email') border-red-500 @enderror">
+                            @error('email')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                     </div>
                 </div>
@@ -172,100 +208,55 @@
                 <div>
                     <h3 class="text-sm font-bold text-gray-700 mb-4 flex items-center gap-2 pb-2 border-b border-gray-100">
                         <span class="w-1 h-5 bg-primary rounded-full"></span>
-                        توضیحات
+                        {{ __('faculty_edit.description') }}
                     </h3>
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">
-                            توضیحات دانشکده
+                            {{ __('faculty_edit.faculty_description') }}
                         </label>
-                        <textarea rows="4"
-                            class="form-input w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white resize-none">دانشکده علوم کامپیوتر با هدف تربیت متخصصان حوزه فناوری اطلاعات و علوم رایانه تاسیس شده است. این دانشکده دارای ۶ دپارتمان فعال در زمینه‌های مختلف از جمله هوش مصنوعی، شبکه‌های کامپیوتری، پایگاه داده و مهندسی نرم‌افزار می‌باشد.</textarea>
+                        <textarea name="description" rows="4" maxlength="500"
+                            class="form-input w-full px-4 py-3 border borderx-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white resize-none @error('description') border-red-500 @enderror">{{ old('description', $faculty->description) }}</textarea>
+                        @error('description')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
                         <div class="flex items-center justify-between mt-1">
-                            <p class="text-xs text-gray-400">حداکثر ۵۰۰ کاراکتر</p>
-                            <p class="text-xs text-gray-400"><span id="charCount">۲۸۵</span> کاراکتر</p>
+                            <p class="text-xs text-gray-400">{{ __('faculty_edit.max_chars', ['count' => 500]) }}</p>
+                            <p class="text-xs text-gray-400"><span id="charCount">{{ strlen(old('description', $faculty->description ?? '')) }}</span> {{ __('faculty_edit.characters') }}</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Section 5: Statistics (Read-only) -->
-                <div>
-                    <h3 class="text-sm font-bold text-gray-700 mb-4 flex items-center gap-2 pb-2 border-b border-gray-100">
-                        <span class="w-1 h-5 bg-gray-400 rounded-full"></span>
-                        آمار دانشکده (فقط خواندنی)
-                    </h3>
-                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <div class="bg-blue-50 rounded-xl p-4 border border-blue-100">
-                            <div class="flex items-center gap-2 mb-2">
-                                <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                                </svg>
-                                <span class="text-xs text-gray-600">تعداد دپارتمان‌ها</span>
-                            </div>
-                            <p class="text-2xl font-bold text-gray-800">۶</p>
-                        </div>
-                        <div class="bg-green-50 rounded-xl p-4 border border-green-100">
-                            <div class="flex items-center gap-2 mb-2">
-                                <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
-                                </svg>
-                                <span class="text-xs text-gray-600">تعداد فارغان</span>
-                            </div>
-                            <p class="text-2xl font-bold text-gray-800">۲,۱۴۳</p>
-                        </div>
-                        <div class="bg-purple-50 rounded-xl p-4 border border-purple-100">
-                            <div class="flex items-center gap-2 mb-2">
-                                <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-                                </svg>
-                                <span class="text-xs text-gray-600">تعداد اساتید</span>
-                            </div>
-                            <p class="text-2xl font-bold text-gray-800">۴۸</p>
-                        </div>
-                        <div class="bg-orange-50 rounded-xl p-4 border border-orange-100">
-                            <div class="flex items-center gap-2 mb-2">
-                                <svg class="w-5 h-5 text-orange-600" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                                </svg>
-                                <span class="text-xs text-gray-600">دانشجویان فعال</span>
-                            </div>
-                            <p class="text-2xl font-bold text-gray-800">۱,۲۵۶</p>
-                        </div>
-                    </div>
-                </div>
+
 
                 <!-- Section 6: Settings -->
                 <div>
                     <h3 class="text-sm font-bold text-gray-700 mb-4 flex items-center gap-2 pb-2 border-b border-gray-100">
                         <span class="w-1 h-5 bg-primary rounded-full"></span>
-                        تنظیمات
+                        {{ __('faculty_edit.settings') }}
                     </h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
-                                وضعیت
+                                {{ __('faculty_edit.status') }}
                             </label>
-                            <select
-                                class="form-input w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white">
-                                <option value="active" selected>فعال</option>
-                                <option value="inactive">غیرفعال</option>
+                            <select name="status"
+                                class="form-input w-full px-4 py-3 border border-grxay-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white @error('status') border-red-500 @enderror">
+                                <option value="active" {{ old('status', $faculty->status ?? 'active') == 'active' ? 'selected' : '' }}>{{ __('faculty_edit.active') }}</option>
+                                <option value="inactive" {{ old('status', $faculty->status ?? 'active') == 'inactive' ? 'selected' : '' }}>{{ __('faculty_edit.inactive') }}</option>
                             </select>
+                            @error('status')
+                                <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                            @enderror
                         </div>
                         <div class="flex items-end">
                             <label
                                 class="flex items-center gap-3 cursor-pointer p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors w-full">
-                                <input type="checkbox" checked
+                                <input type="checkbox" name="show_on_homepage" value="1"
+                                    {{ old('show_on_homepage', $faculty->show_on_homepage ?? false) ? 'checked' : '' }}
                                     class="w-5 h-5 text-primary rounded border-gray-300 focus:ring-primary">
                                 <div>
-                                    <span class="text-sm font-medium text-gray-700 block">نمایش در صفحه اصلی</span>
-                                    <span class="text-xs text-gray-500">دانشکده در لیست عمومی نمایش داده شود</span>
+                                    <span class="text-sm font-medium text-gray-700 block">{{ __('faculty_edit.show_on_homepage') }}</span>
+                                    <span class="text-xs text-gray-500">{{ __('faculty_edit.show_on_homepage_desc') }}</span>
                                 </div>
                             </label>
                         </div>
@@ -278,39 +269,13 @@
             <div class="border-t border-gray-100 p-6 bg-gray-50 rounded-b-2xl">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-3">
-                        <button type="button"
-                            class="px-6 py-3 border border-gray-200 bg-white rounded-xl text-gray-600 hover:bg-gray-50 transition-colors flex items-center gap-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 19l-7-7 7-7" />
-                            </svg>
-                            <span>انصراف</span>
-                        </button>
-                        <button type="button"
-                            class="px-6 py-3 border border-red-200 bg-white rounded-xl text-red-600 hover:bg-red-50 transition-colors flex items-center gap-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
-                            <span>حذف دانشکده</span>
-                        </button>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <button type="button"
-                            class="px-6 py-3 border border-gray-200 bg-white rounded-xl text-gray-600 hover:bg-gray-50 transition-colors flex items-center gap-2">
+                        <button type="submit" form="facultyForm"
+                            class="px-6 py-3 bg-[#34a898] text-white rounded-xl hover:bg-primary-dark transition-colors flex items-center gap-2 shadow-sm">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M5 13l4 4L19 7" />
                             </svg>
-                            <span>ذخیره پیش‌نویس</span>
-                        </button>
-                        <button type="submit"
-                            class="px-6 py-3 bg-primary text-white rounded-xl hover:bg-primary-dark transition-colors flex items-center gap-2 shadow-sm">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M5 13l4 4L19 7" />
-                            </svg>
-                            <span>ذخیره تغییرات</span>
+                            <span>{{ __('faculty_edit.save_changes') }}</span>
                         </button>
                     </div>
                 </div>
@@ -325,9 +290,8 @@
                     d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
             </svg>
             <div>
-                <p class="text-sm font-medium text-amber-800 mb-1">توجه</p>
-                <p class="text-sm text-amber-700">تغییرات اعمال شده در اطلاعات دانشکده بلافاصله در پروفایل فارغ‌التحصیلان و
-                    صفحات عمومی نمایش داده می‌شود. در صورت نیاز به بازگردانی اطلاعات قبلی، با مدیر سیستم تماس بگیرید.</p>
+                <p class="text-sm font-medium text-amber-800 mb-1">{{ __('faculty_edit.attention') }}</p>
+                <p class="text-sm text-amber-700">{{ __('faculty_edit.warning_message') }}</p>
             </div>
         </div>
     </div>
@@ -336,19 +300,26 @@
 @push('page_script')
     <script>
         // Character counter for textarea
-        const textarea = document.querySelector('textarea');
+        const textarea = document.querySelector('textarea[name="description"]');
         const charCount = document.getElementById('charCount');
 
-        textarea.addEventListener('input', function() {
-            const count = this.value.length;
-            charCount.textContent = count.toLocaleString('fa-IR');
+        if (textarea && charCount) {
+            function updateCharCount() {
+                const count = textarea.value.length;
+                charCount.textContent = count;
 
-            if (count > 500) {
-                this.classList.add('border-red-500');
-            } else {
-                this.classList.remove('border-red-500');
+                if (count > 500) {
+                    textarea.classList.add('border-red-500');
+                } else {
+                    textarea.classList.remove('border-red-500');
+                }
             }
-        });
+
+            textarea.addEventListener('input', updateCharCount);
+            
+            // Initialize on page load
+            updateCharCount();
+        }
 
         // Highlight changed fields
         const inputs = document.querySelectorAll('input, select, textarea');
@@ -358,10 +329,48 @@
             });
         });
 
-        // Form submission
-        document.querySelector('form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('تغییرات با موفقیت ذخیره شد!');
+        // Confirm delete
+        function confirmDelete() {
+            if (confirm('{{ __('faculty_edit.confirm_delete') }}')) {
+                document.getElementById('deleteForm').submit();
+            }
+        }
+
+        // Save as draft (you can implement AJAX here)
+        function saveAsDraft() {
+            // For now, just show a message
+            alert('{{ __('faculty_edit.draft_saved') }}');
+            
+            // TODO: Implement AJAX save for draft
+            // You can send an AJAX request to save the current state
+        }
+
+        // Logo preview
+        document.getElementById('logo_input')?.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const logoDiv = document.querySelector('.w-24.h-24');
+                    const existingImg = logoDiv.querySelector('img');
+                    
+                    if (existingImg) {
+                        existingImg.src = e.target.result;
+                    } else {
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.alt = 'Logo';
+                        img.className = 'w-full h-full object-cover relative z-10';
+                        
+                        // Remove the SVG icon
+                        const svg = logoDiv.querySelector('svg');
+                        if (svg) svg.remove();
+                        
+                        logoDiv.appendChild(img);
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
         });
     </script>
 @endpush
