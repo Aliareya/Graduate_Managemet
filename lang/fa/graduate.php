@@ -7,7 +7,7 @@ return [
     'page_description'  => 'فهرست کامل فارغ‌التحصیلان به همراه جزئیات تحصیلی و شغلی',
 
     // Action Buttons
-    'export_excel'      => 'خروجی اکسل',
+    'export_excel'      => 'خروجی PDF',
     'add_graduate'      => 'ثبت فارغ جدید',
 
     // Filters

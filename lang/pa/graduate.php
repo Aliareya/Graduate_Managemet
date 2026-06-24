@@ -7,7 +7,7 @@ return [
     'page_description'  => 'د فارغانو بشپړ لیست د تعلیمي او دندې توضیحاتو سره',
 
     // Action Buttons
-    'export_excel'      => 'د ایکسل وتلو',
+    'export_excel'      => 'PDF',
     'add_graduate'      => 'نوی فارغ ثبت کړئ',
 
     // Filters

@@ -7,7 +7,7 @@ return [
     'page_description'  => 'Complete list of graduates with their academic and employment details',
 
     // Action Buttons
-    'export_excel'      => 'Export Excel',
+    'export_excel'      => 'Export PDF',
     'add_graduate'      => 'Add New Graduate',
 
     // Filters
